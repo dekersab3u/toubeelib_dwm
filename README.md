@@ -1,3 +1,3 @@
-# Dekersabiec
-# Szezcpanski
-# Jeandidier
+# Dekersabiec Thomas
+# Szezcpanski Gaetan
+# Jeandidier Clément
