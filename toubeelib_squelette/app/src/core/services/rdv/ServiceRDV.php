@@ -5,6 +5,7 @@ namespace toubeelib\core\services\rdv;
 use PHPUnit\Framework\Exception;
 use toubeelib\core\dto\rdvDTO;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
+use
 
 class ServiceRDV implements RdvServiceInterface
 {
@@ -19,8 +20,9 @@ class ServiceRDV implements RdvServiceInterface
         try {
             $rdv = this->rdvRep->getRDV($ID);
             return new rdvDTO($rdv);
-        } catch $e Exception::
+        } catch(ServiceRdvInvalidDataException $e) {
+            throw new ServiceRdvInvalidDataException("Invalid RDV ID");
+        }
 
-        return
     }
 }
