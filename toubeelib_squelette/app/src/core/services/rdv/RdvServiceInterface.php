@@ -8,4 +8,6 @@ interface RdvServiceInterface
 {
     public function consulterRDV(string $ID) : rdvDTO;
 
+    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $status, string $specialite, \DateTime $dateRdv) : rdvDTO;
+
 }
