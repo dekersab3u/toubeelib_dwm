@@ -6,23 +6,27 @@ use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\dto\DTO;
 
 namespace toubeelib\core\dto;
+use toubeelib\core\domain\entities\rdv\RendezVous;
+
 class rdvDTO extends DTO
 {
     protected string $ID;
-    protected string $nom;
-    protected string $prenom;
-    protected string $adresse;
-    protected string $tel;
-    protected string $specialite_label;
+    protected string $ID_Patient;
 
-    public function __construct(Praticien $p)
+    protected string $ID_Praticien;
+
+    protected string $status;
+
+    protected \DateTime $dateRdv;
+
+    public function __construct(RendezVous $r)
     {
-        $this->ID = $p->getID();
-        $this->nom = $p->nom;
-        $this->prenom = $p->prenom;
-        $this->adresse = $p->adresse;
-        $this->tel = $p->tel;
-        $this->specialite_label = $p->specialite->label;
+        $this->ID = $r->getID();
+        $this->ID_Patient = $r->ID_Patient;
+        $this->ID_Praticien = $r->ID_Praticien;
+        $this->status = $r->status;
+        $this->dateRdv = $r->dateRdv;
+
     }
 
 
