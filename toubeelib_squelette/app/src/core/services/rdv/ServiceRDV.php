@@ -18,7 +18,7 @@ class ServiceRDV implements RdvServiceInterface
     public function consulterRDV(string $ID): rdvDTO
     {
         try {
-            $rdv = this->rdvRep->getRDV($ID);
+            $rdv = $this->rdvRep->getRDV($ID);
             return new rdvDTO($rdv);
         } catch(ServiceRdvInvalidDataException $e) {
             throw new ServiceRdvInvalidDataException("Invalid RDV ID");
