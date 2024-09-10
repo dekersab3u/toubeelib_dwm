@@ -16,3 +16,6 @@ cache.properties
 # Composer
 composer.phar
 composer.lock
+# ENV
+toubeelib.env
+toubeelibdb.env
