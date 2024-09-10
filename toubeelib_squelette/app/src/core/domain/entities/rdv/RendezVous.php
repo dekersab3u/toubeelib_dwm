@@ -2,10 +2,11 @@
 
 namespace toubeelib\core\domain\entities\rdv;
 
-class RendezVous
-{
+use toubeelib\core\domain\entities\Entity;
+use toubeelib\core\dto\rdvDTO;
 
-    protected string $ID;
+class RendezVous extends Entity
+{
 
     protected string $ID_Patient;
 
@@ -22,6 +23,10 @@ class RendezVous
         $this->ID_Praticien= $ID_Pa;
         $this->status = $s;
         $this->dateRdv = $d;
+    }
+
+    public function toDTO() : rdvDTO{
+        return new rdvDTO($this);
     }
 
 }
