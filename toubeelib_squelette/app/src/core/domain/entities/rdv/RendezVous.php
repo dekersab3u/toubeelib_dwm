@@ -14,6 +14,8 @@ class RendezVous extends Entity
 
     protected string $status;
 
+    protected string $specialite;
+
     protected \DateTime $dateRdv;
 
     public function __construct(string $ID, string $ID_P, string $ID_Pa, string $s, \DateTime $d)
