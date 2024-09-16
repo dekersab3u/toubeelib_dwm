@@ -19,7 +19,7 @@ class rdvDTO extends DTO
 
     protected string $specialite;
 
-    protected \DateTime $dateRdv;
+    protected \DateTimeImmutable $dateRdv;
 
     public function __construct(RendezVous $r)
     {
@@ -30,6 +30,17 @@ class rdvDTO extends DTO
         $this->dateRdv = $r->dateRdv;
         $this->specialite = $r ->specialite;
 
+    }
+
+    public function __get($nomPropriete): mixed
+    {
+        // Vérifie si la propriété demandée existe dans la classe
+        if (property_exists($this, $nomPropriete)) {
+            return $this->$nomPropriete;
+        }
+        // Gestion du cas où la propriété n'existe pas
+        trigger_error("Propriété '$nomPropriete' introuvable", E_USER_NOTICE);
+        return null;
     }
 
 

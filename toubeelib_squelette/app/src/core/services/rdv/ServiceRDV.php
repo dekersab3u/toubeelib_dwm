@@ -4,6 +4,7 @@ namespace toubeelib\core\services\rdv;
 
 use PHPUnit\Framework\Exception;
 use toubeelib\core\dto\InputPraticienDTO;
+use toubeelib\core\dto\PraticienDTO;
 use toubeelib\core\dto\rdvDTO;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
@@ -13,9 +14,12 @@ class ServiceRDV implements RdvServiceInterface
 {
 
     private RdvRepositoryInterface $rdvRep;
+    private PraticienRepositoryInterface $praRep;
 
-    public function __construct(RdvRepositoryInterface $rdvRep) {
+    public function __construct(RdvRepositoryInterface $rdvRep, PraticienRepositoryInterface $p) {
         $this->rdvRep = $rdvRep;
+        $this->praRep = $p;
+
     }
     public function consulterRDV(string $ID): rdvDTO
     {
@@ -31,10 +35,11 @@ class ServiceRDV implements RdvServiceInterface
 
     public function getPraticienRDV(string $ID){
         try{
-            $praticien = $this->rdvRep->getPraticienById($ID);
-            return new InputPraticienDTO($praticien->nom, $praticien->prenom, $praticien->adresse, $praticien->tel, $praticien->specialite);
+            $praticien = $this->praRep->getPraticienById($ID);
+            return new PraticienDTO($praticien);
         }catch(ServiceRdvInvalidDataException $e){
             throw new ServiceRdvInvalidDataException("Invalid Praticien ID");
         }
     }
+
 }

@@ -3,6 +3,7 @@
 namespace toubeelib\infrastructure\repositories;
 
 use Ramsey\Uuid\Uuid;
+use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\domain\entities\rdv\RendezVous;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
@@ -28,6 +29,14 @@ class ArrayRdvRepository implements RdvRepositoryInterface
             throw new RepositoryEntityNotFoundException("Rendez-vous $id not found");
 
         return $rendezvous;
+    }
+
+    public function getPraticienById(string $id): Praticien
+    {
+        $praticien = $this->praticiens[$id] ??
+            throw new RepositoryEntityNotFoundException("Praticien $id not found");
+
+        return $praticien;
     }
 
   
