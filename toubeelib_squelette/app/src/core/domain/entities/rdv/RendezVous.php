@@ -17,6 +17,7 @@ class RendezVous extends Entity
 
     protected \DateTimeImmutable $dateRdv;
 
+
     public function __construct(string $ID_Pa, string $ID_P, string $s, \DateTimeImmutable $d)
     {
         $this->ID_Patient = $ID_P;
@@ -32,6 +33,11 @@ class RendezVous extends Entity
 
     public function setStatus(string $sta){
        $this->status = $sta;
+    }
+
+    public function setIDPatient(string $ID_Patient): void
+    {
+        $this->ID_Patient = $ID_Patient;
     }
 
 }
