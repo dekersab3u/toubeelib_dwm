@@ -15,9 +15,9 @@ class RendezVous extends Entity
 
     protected string $specialite;
 
-    protected \DateTimeImmutable $dateRdv;
+    protected \DateTime $dateRdv;
 
-    public function __construct(string $ID_Pa, string $ID_P, string $s, \DateTimeImmutable $d)
+    public function __construct(string $ID_Pa, string $ID_P, string $s, \DateTime $d)
     {
         $this->ID_Patient = $ID_P;
         $this->ID_Praticien= $ID_Pa;
