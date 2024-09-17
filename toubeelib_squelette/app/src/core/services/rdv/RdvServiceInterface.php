@@ -12,4 +12,6 @@ interface RdvServiceInterface
 
     public function annulerRDV(string $ID);
 
+    public function modifierPatientRDV(string $IDr, string $ID_Patient);
+
 }
