@@ -67,5 +67,11 @@ class ServiceRDV implements RdvServiceInterface
         return $rdv->toDTO();
     }
 
+    public function annulerRDV(string $ID)
+    {
+        $rdv = $this->rdvRep->getRdvById($ID);
+        $rdv->setStatus('Annule');
+    }
+
 
 }
