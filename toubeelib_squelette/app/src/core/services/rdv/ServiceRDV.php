@@ -3,6 +3,7 @@
 namespace toubeelib\core\services\rdv;
 
 use PHPUnit\Framework\Exception;
+use toubeelib\core\domain\entities\rdv\RendezVous;
 use toubeelib\core\dto\InputPraticienDTO;
 use toubeelib\core\dto\PraticienDTO;
 use toubeelib\core\dto\rdvDTO;
@@ -40,6 +41,12 @@ class ServiceRDV implements RdvServiceInterface
         }catch(ServiceRdvInvalidDataException $e){
             throw new ServiceRdvInvalidDataException("Invalid Praticien ID");
         }
+    }
+
+    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $status, string $specialite, \DateTime $dateRdv): rdvDTO
+    {
+        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $status, $dateRdv);
+        return $rdv->toDTO();
     }
 
 }
