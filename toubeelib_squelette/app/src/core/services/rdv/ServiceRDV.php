@@ -70,5 +70,10 @@ class ServiceRDV implements RdvServiceInterface
         $rdv->setStatus('Annule');
     }
 
+    public function modifierPatientRDV(string $IDr, string $ID_Patient) :rdvDTO {
+        $rdv = $this->rdvRep->getRdvById($IDr);
+        $rdv->setIDPatient($ID_Patient);
+        return $rdv->toDTO();
+    }
 
 }
