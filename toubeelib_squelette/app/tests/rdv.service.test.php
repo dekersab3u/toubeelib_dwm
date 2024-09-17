@@ -25,5 +25,12 @@ try{
     echo $e->getMessage() . PHP_EOL;
 }
 
+try{
+    $test = $service->creerRDV('r1');
+} catch (\toubeelib\core\services\rdv\ServiceRdvInvalidDataException $e) {
+    echo 'exception : ' . PHP_EOL;
+    echo $e->getMessage() . PHP_EOL;
+}
+
 
 
