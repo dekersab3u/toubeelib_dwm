@@ -17,6 +17,10 @@ class ArrayRdvRepository implements RdvRepositoryInterface
             $r1->setID('r1');
             $r2 = new RendezVous('p1', 'pa1', 'A', \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 10:00'));
             $r2->setID('r2');
+            $r1 = new RendezVous('p1', 'pa1', 'A', \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 14:00') );
+            $r1->setID('r3');
+            $r2 = new RendezVous('p1', 'pa1', 'A', \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 16:30'));
+            $r2->setID('r4');
             $r3 = new RendezVous('p2', 'pa1', 'A', \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 09:30'));
             $r3->setID('r3');
 

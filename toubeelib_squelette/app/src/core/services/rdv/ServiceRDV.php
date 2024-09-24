@@ -16,6 +16,17 @@ use toubeelib\core\services\praticien\ServicePraticienInvalidDataException;
 
 class ServiceRDV implements RdvServiceInterface
 {
+    private $horairesPraticien = [
+        'Monday'    => ['08:00', '17:00'],
+        'Tuesday'   => ['09:00', '18:00'],
+        'Wednesday' => ['08:30', '16:00'],
+        'Thursday'  => ['10:00', '19:00'],
+        'Friday'    => ['08:00', '15:00'],
+        'Saturday'  => ['09:00', '13:00'],  // Optionnel : Samedi matin uniquement
+        'Sunday'    => [null, null],        // Fermé le dimanche
+    ];
+
+
 
     private RdvRepositoryInterface $rdvRep;
     private PraticienRepositoryInterface $praRep;
@@ -69,6 +80,48 @@ class ServiceRDV implements RdvServiceInterface
         $rdv = $this->rdvRep->getRdvById($ID);
         $rdv->setStatus('Annule');
     }
+
+    public function listeDisponibilitesPraticien(string $ID_Praticien, \DateTime $dateDebut, \DateTime $dateFin): array
+    {
+        $rdvs = $this->rdvRep->getRdvsByPraticienId($ID_Praticien);
+
+        $dispos = [];
+
+        while ($dateDebut <= $dateFin) {
+            $jourSemaine = $dateDebut->format('l');
+
+
+            $horaireJour = $this->horairesPraticien[$jourSemaine];
+            if ($horaireJour[0] === null || $horaireJour[1] === null) {
+                $dateDebut->modify('+1 day');
+                continue;
+            }
+
+            $heureDebut = new \DateTime($dateDebut->format('Y-m-d') . ' ' . $horaireJour[0]);
+            $heureFin = new \DateTime($dateDebut->format('Y-m-d') . ' ' . $horaireJour[1]);
+
+            $creneau = clone $heureDebut;
+            while ($creneau < $heureFin) {
+                $dispo = true;
+
+                foreach ($rdvs as $rdv) {
+                    if ($rdv->dateRdv == $creneau->format('Y-m-d H:i')) {
+                        $dispo = false;
+                        break;
+                    }
+                }
+                if ($dispo) {
+                    $dispos[] = clone $creneau;
+                }
+                $creneau->add(new \DateInterval('PT30M'));
+            }
+            $dateDebut->modify('+1 day');
+        }
+
+        return $dispos;
+    }
+
+
 
 
 }
