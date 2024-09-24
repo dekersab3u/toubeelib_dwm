@@ -40,4 +40,11 @@ class RendezVous extends Entity
         $this->ID_Patient = $ID_Patient;
     }
 
+    public function setSpecialite(string $specialite): void
+    {
+        $this->specialite = $specialite;
+    }
+
+
+
 }

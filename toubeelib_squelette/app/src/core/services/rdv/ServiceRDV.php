@@ -70,10 +70,24 @@ class ServiceRDV implements RdvServiceInterface
         $rdv->setStatus('Annule');
     }
 
-    public function modifierPatientRDV(string $IDr, string $ID_Patient) :rdvDTO {
-        $rdv = $this->rdvRep->getRdvById($IDr);
-        $rdv->setIDPatient($ID_Patient);
+    public function modifierRdv(RendezVous $rdv, ?string $ID_Patient = null, ?string $specialite = null): rdvDTO
+    {
+        if ($ID_Patient !== null) {
+            $rdv->setIDPatient($ID_Patient);
+        }
+        if ($specialite !== null) {
+            $prat = null;
+            $prat = $this -> getPraticienRDV($rdv->getID());
+
+            // Vérification que la spécialité demandée fait bien partie des spécialités du praticien
+            if ($specialite !== $prat->specialite) {
+                throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
+            }
+            $rdv->setSpecialite($specialite);
+        }
+
         return $rdv->toDTO();
     }
+
 
 }
