@@ -57,23 +57,30 @@ class ServiceRDV implements RdvServiceInterface
         }
     }
 
-    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $status, string $specialite, \DateTimeImmutable $dateRdv): rdvDTO
+    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $specialite, \DateTime $dateRdv): rdvDTO
     {
         try {
-            $prat = null;
-            $prat -> ServicePraticien->getPraticienById($ID_Praticien); // Appel de la méthode qui peut lever une exception
+
+            $prat = $this->praRep->getPraticienById($ID_Praticien);
 
             if ($specialite !== $prat->specialite) {
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
             }
+            $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateRdv, $dateRdv);
+
+
 
         } catch (ServicePraticienInvalidDataException $e) {
             throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
         }
 
-        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $dateRdv);
+        // Création du rendez-vous
+        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $specialite, $dateRdv);
+
+        // Retourne un DTO (Data Transfer Object) correspondant
         return $rdv->toDTO();
     }
+
 
     public function annulerRDV(string $ID)
     {
@@ -89,9 +96,8 @@ class ServiceRDV implements RdvServiceInterface
 
         while ($dateDebut <= $dateFin) {
             $jourSemaine = $dateDebut->format('l');
-
-
             $horaireJour = $this->horairesPraticien[$jourSemaine];
+
             if ($horaireJour[0] === null || $horaireJour[1] === null) {
                 $dateDebut->modify('+1 day');
                 continue;
@@ -103,23 +109,26 @@ class ServiceRDV implements RdvServiceInterface
             $creneau = clone $heureDebut;
             while ($creneau < $heureFin) {
                 $dispo = true;
-
                 foreach ($rdvs as $rdv) {
-                    if ($rdv->dateRdv == $creneau->format('Y-m-d H:i')) {
+
+                    if ($rdv->dateRdv->getTimestamp() == $creneau->getTimestamp()) {
                         $dispo = false;
                         break;
                     }
                 }
+
                 if ($dispo) {
                     $dispos[] = clone $creneau;
                 }
                 $creneau->add(new \DateInterval('PT30M'));
             }
+
             $dateDebut->modify('+1 day');
         }
 
         return $dispos;
     }
+
 
     public function modifierRdv(string $IDr, ?string $ID_Patient = null, ?string $specialite = null): rdvDTO
     {

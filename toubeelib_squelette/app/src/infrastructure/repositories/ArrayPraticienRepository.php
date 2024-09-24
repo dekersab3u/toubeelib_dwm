@@ -81,6 +81,11 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         return $praticien;
     }
 
+    public function getSpecialitePraticiens(): array
+    {
+
+    }
+
 
 
 }
