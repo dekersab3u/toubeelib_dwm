@@ -18,11 +18,11 @@ class RendezVous extends Entity
     protected \DateTimeImmutable $dateRdv;
 
 
-    public function __construct(string $ID_Pa, string $ID_P, string $s, \DateTimeImmutable $d)
+    public function __construct(string $ID_Pa, string $ID_P, \DateTimeImmutable $d)
     {
         $this->ID_Patient = $ID_P;
         $this->ID_Praticien= $ID_Pa;
-        $this->status = $s;
+        $this->status = 'prévu';
         $this->dateRdv = $d;
         $this->specialite = ' ';
     }

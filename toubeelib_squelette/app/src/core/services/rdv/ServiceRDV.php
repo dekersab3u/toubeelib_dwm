@@ -71,7 +71,7 @@ class ServiceRDV implements RdvServiceInterface
             throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
         }
 
-        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $status, $dateRdv);
+        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $dateRdv);
         return $rdv->toDTO();
     }
 
@@ -131,7 +131,7 @@ class ServiceRDV implements RdvServiceInterface
             $prat = null;
             $prat = $this -> getPraticienRDV($rdv->getID());
 
-            // Vérification que la spécialité demandée fait bien partie des spécialités du praticien
+
             if ($specialite !== $prat->specialite) {
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
             }
