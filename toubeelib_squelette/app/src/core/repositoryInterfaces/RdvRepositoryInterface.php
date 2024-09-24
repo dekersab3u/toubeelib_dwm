@@ -10,4 +10,6 @@ interface RdvRepositoryInterface
     public function getRdvById(string $id) : RendezVous;
 
     public function getPraticienById(string $id) : Praticien;
+
+    public function getRdvsByPraticienId(string $id) : array;
 }

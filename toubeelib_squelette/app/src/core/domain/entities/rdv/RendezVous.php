@@ -35,8 +35,7 @@ class RendezVous extends Entity
        $this->status = $sta;
     }
 
-    public function setIDPatient(string $ID_Patient): void
-    {
+    public function setIDPatient(string $ID_Patient): void{
         $this->ID_Patient = $ID_Patient;
     }
 

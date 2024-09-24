@@ -25,12 +25,18 @@ try{
     echo $e->getMessage() . PHP_EOL;
 }
 
-try{
-    $test = $service->creerRDV('r1');
-} catch (\toubeelib\core\services\rdv\ServiceRdvInvalidDataException $e) {
-    echo 'exception : ' . PHP_EOL;
-    echo $e->getMessage() . PHP_EOL;
+
+
+
+$dateDebut = new \DateTime('2024-09-02');
+$dateFin = new \DateTime('2024-09-02');
+
+$disponibilites = $service->listeDisponibilitesPraticien('p1', $dateDebut, $dateFin);
+foreach ($disponibilites as $dispo) {
+    echo $dispo->format('Y-m-d H:i') . PHP_EOL;
 }
+
+
 
 
 
