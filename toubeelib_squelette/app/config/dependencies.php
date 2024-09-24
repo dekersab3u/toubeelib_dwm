@@ -7,6 +7,7 @@ use \toubeelib\core\services\rdv\RdvServiceInterface;
 use \toubeelib\application\actions\AccesRdvAction;
 use toubeelib\infrastructure\repositories\ArrayPraticienRepository;
 use toubeelib\infrastructure\repositories\ArrayRdvRepository;
+use \toubeelib\application\actions\ModifRdvAction;
 
 return [
 
@@ -29,5 +30,9 @@ return [
     AccesRdvAction::class => function(ContainerInterface $c){
         return new AccesRdvAction($c->get(RdvServiceInterface::class));
     },
+
+    ModifRdvAction::class => function (ContainerInterface $c) {
+        return new ModifRdvAction($c->get(RdvServiceInterface::class));
+    }
 
 ];
