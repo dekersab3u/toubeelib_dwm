@@ -10,6 +10,7 @@ use toubeelib\core\dto\PraticienDTO;
 use toubeelib\core\dto\rdvDTO;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
+use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 use toubeelib\core\services\praticien\ServicePraticien;
 use toubeelib\core\services\praticien\ServicePraticienInvalidDataException;
 
@@ -57,30 +58,23 @@ class ServiceRDV implements RdvServiceInterface
         }
     }
 
-    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $specialite, \DateTime $dateRdv): rdvDTO
+    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $status, string $specialite, \DateTimeImmutable $dateRdv): rdvDTO
     {
         try {
-
-            $prat = $this->praRep->getPraticienById($ID_Praticien);
+            $prat = null;
+            $prat -> ServicePraticien->getPraticienById($ID_Praticien); // Appel de la méthode qui peut lever une exception
 
             if ($specialite !== $prat->specialite) {
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
             }
-            $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateRdv, $dateRdv);
-
-
 
         } catch (ServicePraticienInvalidDataException $e) {
             throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
         }
 
-        // Création du rendez-vous
-        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $specialite, $dateRdv);
-
-        // Retourne un DTO (Data Transfer Object) correspondant
+        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $status, $dateRdv);
         return $rdv->toDTO();
     }
-
 
     public function annulerRDV(string $ID)
     {
@@ -96,8 +90,9 @@ class ServiceRDV implements RdvServiceInterface
 
         while ($dateDebut <= $dateFin) {
             $jourSemaine = $dateDebut->format('l');
-            $horaireJour = $this->horairesPraticien[$jourSemaine];
 
+
+            $horaireJour = $this->horairesPraticien[$jourSemaine];
             if ($horaireJour[0] === null || $horaireJour[1] === null) {
                 $dateDebut->modify('+1 day');
                 continue;
@@ -109,41 +104,36 @@ class ServiceRDV implements RdvServiceInterface
             $creneau = clone $heureDebut;
             while ($creneau < $heureFin) {
                 $dispo = true;
-                foreach ($rdvs as $rdv) {
 
-                    if ($rdv->dateRdv->getTimestamp() == $creneau->getTimestamp()) {
+                foreach ($rdvs as $rdv) {
+                    if ($rdv->dateRdv == $creneau->format('Y-m-d H:i')) {
                         $dispo = false;
                         break;
                     }
                 }
-
                 if ($dispo) {
                     $dispos[] = clone $creneau;
                 }
                 $creneau->add(new \DateInterval('PT30M'));
             }
-
             $dateDebut->modify('+1 day');
         }
 
         return $dispos;
     }
 
-
     public function modifierRdv(string $IDr, ?string $ID_Patient = null, ?string $specialite = null): rdvDTO
     {
-        try {
-            $rdv = $this->rdvRep->getRdvById($IDr);
-        } catch (RepositoryEntityNotFoundException $e) {
-            throw new ServiceRdvInvalidDataException("Rendez-vous non trouvé avec l'ID: $IDr");
-        }
+        $rdv = $this->rdvRep->getRdvById($IDr);
         if ($ID_Patient !== null) {
             $rdv->setIDPatient($ID_Patient);
         }
         if ($specialite !== null) {
-            $prat = $this -> getPraticienRDV($rdv->ID_Praticien);
+            $prat = null;
+            $prat = $this -> getPraticienRDV($rdv->getID());
 
-            if ($specialite !== $prat->specialite_label) {
+            // Vérification que la spécialité demandée fait bien partie des spécialités du praticien
+            if ($specialite !== $prat->specialite) {
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
             }
             $rdv->setSpecialite($specialite);
@@ -151,43 +141,6 @@ class ServiceRDV implements RdvServiceInterface
 
         return $rdv->toDTO();
     }
-
-    public function marquerCommeHonore(string $IDr): void
-    {
-        $rdv = $this->rdvRep->getRdvById($IDr);
-        if($rdv->status === 'prévu'){
-            $rdv->setStatus('honoré');
-        }
-    }
-
-
-    public function marquerCommeNonHonore(string $IDr): void
-    {
-        $rdv = $this->rdvRep->getRdvById($IDr);
-        if($rdv->status === 'prévu'){
-            $rdv->setStatus('non honoré');
-        }
-    }
-
-
-    public function marquerCommePaye(string $IDr): void
-    {
-        $rdv = $this->rdvRep->getRdvById($IDr);
-        if($rdv->status === 'honoré'){
-            $rdv->setStatus('payé');
-        }
-    }
-
-
-    public function marquerCommeTransmis(string $IDr): void
-    {
-        $rdv = $this->rdvRep->getRdvById($IDr);
-        if($rdv->status === 'payé'){
-            $rdv->setStatus('transmis');
-        }
-    }
-
-
 
 
 }
