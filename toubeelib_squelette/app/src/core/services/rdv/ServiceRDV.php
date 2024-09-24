@@ -57,29 +57,44 @@ class ServiceRDV implements RdvServiceInterface
         }
     }
 
-    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $specialite, \DateTime $dateRdv): rdvDTO
-    {
-        try {
+    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $specialite, \DateTimeImmutable $dateRdv): rdvDTO{
+    try {
 
-            $prat = $this->praRep->getPraticienById($ID_Praticien);
-
-            if ($specialite !== $prat->specialite) {
-                throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
-            }
-            $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateRdv, $dateRdv);
+        $prat = $this->praRep->getPraticienById($ID_Praticien);
 
 
-
-        } catch (ServicePraticienInvalidDataException $e) {
-            throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
+        if ($specialite !== $prat->specialite->label) {
+            throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
         }
 
-        // Création du rendez-vous
-        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $specialite, $dateRdv);
+        $dateDebut = new \DateTime($dateRdv->format('Y-m-d 00:00:00'));
+        $dateFin = new \DateTime($dateRdv->format('Y-m-d 23:59:59'));
+        $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateDebut, $dateFin);
 
-        // Retourne un DTO (Data Transfer Object) correspondant
-        return $rdv->toDTO();
+
+        $rdvDispo = false;
+        foreach ($dispos as $dispo) {
+            if ($dispo->format('Y-m-d H:i') === $dateRdv->format('Y-m-d H:i')) {
+                $rdvDispo = true;
+                break;
+            }
+        }
+
+        if (!$rdvDispo) {
+            throw new ServiceRdvInvalidDataException("Le créneau du rendez-vous n'est pas disponible.");
+        }
+
+    } catch (ServicePraticienInvalidDataException $e) {
+        throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
     }
+
+    // Création du rendez-vous
+    $rdv = new RendezVous($ID_Patient, $ID_Praticien, $dateRdv);
+
+    // Retourne un DTO (Data Transfer Object) correspondant
+    return $rdv->toDTO();
+}
+
 
 
     public function annulerRDV(string $ID)

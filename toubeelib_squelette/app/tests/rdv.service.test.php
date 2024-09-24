@@ -1,5 +1,7 @@
 <?php
 
+use toubeelib\core\services\rdv\ServiceRdvInvalidDataException;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $service = new \toubeelib\core\services\rdv\ServiceRDV(new \toubeelib\infrastructure\repositories\ArrayRdvRepository(), new \toubeelib\infrastructure\repositories\ArrayPraticienRepository()
@@ -43,6 +45,17 @@ $disponibilites = $service->listeDisponibilitesPraticien('p1', $dateDebut, $date
 foreach ($disponibilites as $dispo) {
     echo $dispo->format('Y-m-d H:i') . PHP_EOL;
 }
+
+
+try {
+    $rdvDTO = $service->creerRDV('abcd', 'p1', 'Dentiste', new \DateTimeImmutable('2024-09-23 12:00'));
+
+    echo $rdvDTO;
+
+} catch (ServiceRdvInvalidDataException $e) {
+    echo "Erreur lors de la création du rendez-vous : " . $e->getMessage();
+}
+
 
 
 
