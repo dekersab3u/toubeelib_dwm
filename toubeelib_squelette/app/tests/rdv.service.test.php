@@ -25,6 +25,14 @@ try{
     echo $e->getMessage() . PHP_EOL;
 }
 
+try {
+    $test = $service->modifierRDV('r1', null, "dermatologue");
+    echo $test->status . "\n";
+} catch (\toubeelib\core\services\rdv\ServiceRdvInvalidDataException $e){
+    echo 'exception : ' . PHP_EOL;
+    echo $e->getMessage() . PHP_EOL;
+}
+
 
 
 
