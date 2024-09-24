@@ -33,6 +33,14 @@ try {
     echo $e->getMessage() . PHP_EOL;
 }
 
+try {
+    $test = $service->modifierRDV('r1', null, "dermatologue");
+    echo $test->status . "\n";
+} catch (\toubeelib\core\services\rdv\ServiceRdvInvalidDataException $e){
+    echo 'exception : ' . PHP_EOL;
+    echo $e->getMessage() . PHP_EOL;
+}
+
 
 
 
@@ -43,6 +51,8 @@ $disponibilites = $service->listeDisponibilitesPraticien('p1', $dateDebut, $date
 foreach ($disponibilites as $dispo) {
     echo $dispo->format('Y-m-d H:i') . PHP_EOL;
 }
+
+
 
 
 

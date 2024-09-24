@@ -124,16 +124,18 @@ class ServiceRDV implements RdvServiceInterface
 
     public function modifierRdv(string $IDr, ?string $ID_Patient = null, ?string $specialite = null): rdvDTO
     {
-        $rdv = $this->rdvRep->getRdvById($IDr);
+        try {
+            $rdv = $this->rdvRep->getRdvById($IDr);
+        } catch (RepositoryEntityNotFoundException $e) {
+            throw new ServiceRdvInvalidDataException("Rendez-vous non trouvé avec l'ID: $IDr");
+        }
         if ($ID_Patient !== null) {
             $rdv->setIDPatient($ID_Patient);
         }
         if ($specialite !== null) {
-            $prat = null;
-            $prat = $this -> getPraticienRDV($rdv->getID());
+            $prat = $this -> getPraticienRDV($rdv->ID_Praticien);
 
-            // Vérification que la spécialité demandée fait bien partie des spécialités du praticien
-            if ($specialite !== $prat->specialite) {
+            if ($specialite !== $prat->specialite_label) {
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
             }
             $rdv->setSpecialite($specialite);
