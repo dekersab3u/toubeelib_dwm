@@ -141,5 +141,42 @@ class ServiceRDV implements RdvServiceInterface
         return $rdv->toDTO();
     }
 
+    public function marquerCommeHonore(string $IDr): void
+    {
+        $rdv = $this->rdvRep->getRdvById($IDr);
+        if($rdv->status === 'prévu'){
+            $rdv->setStatus('honoré');
+        }
+    }
+
+
+    public function marquerCommeNonHonore(string $IDr): void
+    {
+        $rdv = $this->rdvRep->getRdvById($IDr);
+        if($rdv->status === 'prévu'){
+            $rdv->setStatus('non honoré');
+        }
+    }
+
+
+    public function marquerCommePaye(string $IDr): void
+    {
+        $rdv = $this->rdvRep->getRdvById($IDr);
+        if($rdv->status === 'honoré'){
+            $rdv->setStatus('payé');
+        }
+    }
+
+
+    public function marquerCommeTransmis(string $IDr): void
+    {
+        $rdv = $this->rdvRep->getRdvById($IDr);
+        if($rdv->status === 'payé'){
+            $rdv->setStatus('transmis');
+        }
+    }
+
+
+
 
 }

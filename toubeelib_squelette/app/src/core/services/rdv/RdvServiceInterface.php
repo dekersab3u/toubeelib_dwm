@@ -14,4 +14,12 @@ interface RdvServiceInterface
 
     public function modifierRDV(string $IDr, string $ID_Patient, string $specialite);
 
+    public function marquerCommeHonore(string $IDr);
+
+    public function marquerCommeNonHonore(string $IDr);
+
+    public function marquerCommePaye(string $IDr);
+
+    public function marquerCommeTransmis(string $IDr);
+
 }
