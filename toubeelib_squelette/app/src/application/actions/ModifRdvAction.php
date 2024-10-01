@@ -35,16 +35,18 @@ class ModifRdvAction extends AbstractAction
                 }
 
 
-
             }catch (\Exception $e){
                 $rs->getBody()->write(json_encode(['error' => 'test']));
 
                 return $rs
                     ->withHeader('Content-Type', 'application/json')
-                    ->withStatus(404);w
+                    ->withStatus(404);
             }
 
-             $modifrdv = $this->rdvInt->modifierRDV($rdv->ID,$idpatient, $specialite);
+
+            $modifrdv = $this->rdvInt->modifierRDV($rdv->ID,$idpatient, $specialite);
+
+
 
 
 
