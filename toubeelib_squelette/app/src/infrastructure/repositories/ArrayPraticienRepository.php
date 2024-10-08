@@ -43,26 +43,40 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
 
     public function __construct() {
         $this->praticiens['p1'] = new Praticien( 'Dupont', 'Jean', 'nancy', '0123456789');
-        $this->praticiens['p1']->setSpecialite(new Specialite('A', 'Dentiste', 'Spécialiste des dents'));
+        $this->praticiens['p1']->addSpecialite(new Specialite('A', 'Dentiste', 'Spécialiste des dents'));
+        $this->praticiens['p1']->addSpecialite(new Specialite('D', 'Généraliste', 'Médecin généraliste'));
         $this->praticiens['p1']->setID('p1');
 
         $this->praticiens['p2'] = new Praticien( 'Durand', 'Pierre', 'vandeuve', '0123456789');
-        $this->praticiens['p2']->setSpecialite(new Specialite('B', 'Ophtalmologue', 'Spécialiste des yeux'));
+        $this->praticiens['p2']->addSpecialite(new Specialite('B', 'Ophtalmologue', 'Spécialiste des yeux'));
         $this->praticiens['p2']->setID('p2');
 
         $this->praticiens['p3'] = new Praticien( 'Martin', 'Marie', '3lassou', '0123456789');
-        $this->praticiens['p3']->setSpecialite(new Specialite('C', 'Généraliste', 'Médecin généraliste'));
+        $this->praticiens['p3']->addSpecialite(new Specialite('C', 'Généraliste', 'Médecin généraliste'));
         $this->praticiens['p3']->setID('p3');
 
     }
-    public function getSpecialiteById(string $id): Specialite
+    public function getSpecialitesByPraticienId(string $id): array
     {
 
-        $specialite = self::SPECIALITES[$id] ??
-            throw new RepositoryEntityNotFoundException("Specialite $id not found") ;
+        $praticien = $this->praticiens[$id] ??
+            throw new RepositoryEntityNotFoundException("Praticien avec l'ID $id non trouvé.");
 
-        return new Specialite($specialite['ID'], $specialite['label'], $specialite['description']);
+        $specialites = $praticien->specialites;
+
+        if (empty($specialites)) {
+            throw new RepositoryEntityNotFoundException("Aucune spécialité trouvée pour le praticien avec l'ID $id.");
+        }
+
+
+        $specialitesDTO = [];
+        foreach ($praticien->specialites as $specialite) {
+            $specialitesDTO[] = new Specialite($specialite->getID(), $specialite->label, $specialite->description);
+        }
+
+        return $specialitesDTO;
     }
+
 
     public function save(Praticien $praticien): string
     {
@@ -81,10 +95,7 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         return $praticien;
     }
 
-    public function getSpecialitePraticiens(): array
-    {
 
-    }
 
 
 

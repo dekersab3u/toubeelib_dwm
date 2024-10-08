@@ -27,6 +27,11 @@ class RendezVous extends Entity
         $this->specialite = ' ';
     }
 
+    public function __toString(): string
+    {
+        return "Rendez-vous [Patient: $this->ID_Patient, Praticien: $this->ID_Praticien, Spécialité: $this->specialite, Date: " . $this->dateRdv->format('Y-m-d H:i') . ", Statut: $this->status]";
+    }
+
     public function toDTO() : rdvDTO{
         return new rdvDTO($this);
     }

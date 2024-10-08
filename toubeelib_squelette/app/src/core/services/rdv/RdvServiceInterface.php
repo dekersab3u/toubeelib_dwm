@@ -12,7 +12,7 @@ interface RdvServiceInterface
 
     public function annulerRDV(string $ID);
 
-    public function modifierRDV(string $IDr, string $ID_Patient, string $specialite);
+   // public function modifierRDV(string $IDr, string $ID_Patient, string $specialite);
 
     public function marquerCommeHonore(string $IDr);
 

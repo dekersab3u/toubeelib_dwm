@@ -11,7 +11,7 @@ class Praticien extends Entity
     protected string $prenom;
     protected string $adresse;
     protected string $tel;
-    protected ?Specialite $specialite = null;
+    protected array $specialites;
 
     public function __construct(string $nom, string $prenom, string $adresse, string $tel)
     {
@@ -19,16 +19,27 @@ class Praticien extends Entity
         $this->prenom = $prenom;
         $this->adresse = $adresse;
         $this->tel = $tel;
+        $this->specialites = [];
     }
 
 
-    public function setSpecialite(Specialite $specialite): void
+    public function addSpecialite(Specialite $specialite): void
     {
-        $this->specialite = $specialite;
+        $this->specialites[] = $specialite;
     }
+
+
+    public function removeSpecialite(Specialite $specialite): void
+    {
+        $this->specialites = array_filter($this->specialites, function ($sp) use ($specialite) {
+            return $sp->getID() !== $specialite->getID();
+        });
+    }
+
 
     public function toDTO(): PraticienDTO
     {
         return new PraticienDTO($this);
     }
+
 }

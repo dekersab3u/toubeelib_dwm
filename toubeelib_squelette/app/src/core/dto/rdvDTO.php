@@ -28,7 +28,7 @@ class rdvDTO extends DTO
         $this->ID_Praticien = $r->ID_Praticien;
         $this->status = $r->status;
         $this->dateRdv = $r->dateRdv;
-        $this->specialite = $r ->specialite;
+        $this->specialite = $r->specialite;
 
     }
 

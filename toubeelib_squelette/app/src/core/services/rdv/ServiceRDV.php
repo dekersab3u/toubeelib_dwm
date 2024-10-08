@@ -3,6 +3,7 @@
 namespace toubeelib\core\services\rdv;
 
 use PHPUnit\Framework\Exception;
+use Ramsey\Uuid\Uuid;
 use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\domain\entities\rdv\RendezVous;
 use toubeelib\core\dto\InputPraticienDTO;
@@ -57,44 +58,62 @@ class ServiceRDV implements RdvServiceInterface
         }
     }
 
-    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $specialite, \DateTimeImmutable $dateRdv): rdvDTO{
-    try {
+    public function creerRDV(string $ID_Patient, string $ID_Praticien, string $specialiteLabel, \DateTimeImmutable $dateRdv): rdvDTO
+    {
+        try {
 
-        $prat = $this->praRep->getPraticienById($ID_Praticien);
-
-
-        if ($specialite !== $prat->specialite->label) {
-            throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas au praticien indiqué");
-        }
-
-        $dateDebut = new \DateTime($dateRdv->format('Y-m-d 00:00:00'));
-        $dateFin = new \DateTime($dateRdv->format('Y-m-d 23:59:59'));
-        $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateDebut, $dateFin);
+            $prat = $this->praRep->getPraticienById($ID_Praticien);
 
 
-        $rdvDispo = false;
-        foreach ($dispos as $dispo) {
-            if ($dispo->format('Y-m-d H:i') === $dateRdv->format('Y-m-d H:i')) {
-                $rdvDispo = true;
-                break;
+            $praticienSpecialites = $this->praRep->getSpecialitesByPraticienId($ID_Praticien);
+
+
+            $specialiteTrouvee = false;
+            foreach ($praticienSpecialites as $specialite) {
+                if ($specialite->toDTO()->label === $specialiteLabel) {
+                    $specialiteTrouvee = true;
+                    break;
+                }
             }
+
+            if (!$specialiteTrouvee) {
+                throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas à celles du praticien.");
+            }
+
+
+            $dateDebut = new \DateTime($dateRdv->format('Y-m-d 00:00:00'));
+            $dateFin = new \DateTime($dateRdv->format('Y-m-d 23:59:59'));
+            $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateDebut, $dateFin);
+
+
+            $rdvDispo = false;
+            foreach ($dispos as $dispo) {
+                if ($dispo->format('Y-m-d H:i') === $dateRdv->format('Y-m-d H:i')) {
+                    $rdvDispo = true;
+                    break;
+                }
+            }
+
+            if (!$rdvDispo) {
+                throw new ServiceRdvInvalidDataException("Le créneau du rendez-vous n'est pas disponible.");
+            }
+
+        } catch (ServicePraticienInvalidDataException $e) {
+            throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
         }
 
-        if (!$rdvDispo) {
-            throw new ServiceRdvInvalidDataException("Le créneau du rendez-vous n'est pas disponible.");
-        }
 
-    } catch (ServicePraticienInvalidDataException $e) {
-        throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
+        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $dateRdv);
+
+
+        $rdv->setID(Uuid::uuid4()->toString());
+
+
+        $rdv->setSpecialite($specialiteLabel);
+
+
+        return $rdv->toDTO();
     }
-
-    // Création du rendez-vous
-    $rdv = new RendezVous($ID_Patient, $ID_Praticien, $dateRdv);
-
-    // Retourne un DTO (Data Transfer Object) correspondant
-    return $rdv->toDTO();
-}
-
 
 
     public function annulerRDV(string $ID)
@@ -145,7 +164,7 @@ class ServiceRDV implements RdvServiceInterface
     }
 
 
-    public function modifierRdv(string $IDr, ?string $ID_Patient = null, ?string $specialite = null): rdvDTO
+  /*  public function modifierRdv(string $IDr, ?string $ID_Patient = null, ?string $specialite = null): rdvDTO
     {
         try {
             $rdv = $this->rdvRep->getRdvById($IDr);
@@ -166,6 +185,7 @@ class ServiceRDV implements RdvServiceInterface
 
         return $rdv->toDTO();
     }
+*/
 
     public function marquerCommeHonore(string $IDr): void
     {

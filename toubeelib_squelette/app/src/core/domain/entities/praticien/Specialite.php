@@ -18,6 +18,8 @@ class Specialite extends Entity
         $this->description = $description;
     }
 
+
+
     public function toDTO(): SpecialiteDTO
     {
         return new SpecialiteDTO($this->ID, $this->label, $this->description);
