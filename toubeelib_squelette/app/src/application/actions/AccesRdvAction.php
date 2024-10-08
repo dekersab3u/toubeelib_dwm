@@ -35,6 +35,11 @@ class AccesRdvAction extends AbstractAction
                     "self" => [
                         "href" => "/rdvs/" . $rdv->ID
                     ]
+                ],
+                "Modifier RDV" => [
+                    "href" => "/rdvs/" . $rdv->ID,
+                    "method" => "PATCH",
+                    "titre" => "Modifier le patient et la specialite du rendez-vous"
                 ]
             ];
 
