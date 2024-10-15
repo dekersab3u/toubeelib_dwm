@@ -14,6 +14,8 @@ interface RdvServiceInterface
 
    // public function modifierRDV(string $IDr, string $ID_Patient, string $specialite);
 
+    public function listeDisponibilitesPraticien(string $ID_Praticien, \DateTime $dateDebut, \DateTime $dateFin): array;
+
     public function marquerCommeHonore(string $IDr);
 
     public function marquerCommeNonHonore(string $IDr);
