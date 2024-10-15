@@ -4,8 +4,6 @@ namespace toubeelib\application\actions;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use toubeelib\application\actions\AbstractAction;
-use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
 use toubeelib\core\services\rdv\RdvServiceInterface;
 
 class AccesRdvAction extends AbstractAction

@@ -4,9 +4,8 @@ namespace toubeelib\application\actions;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use toubeelib\application\actions\AbstractAction;
-use toubeelib\core\dto\rdvDTO;
 use toubeelib\core\services\rdv\RdvServiceInterface;
+use Respect\Validation\Validator;
 
 class ModifRdvAction extends AbstractAction
 {
@@ -23,7 +22,12 @@ class ModifRdvAction extends AbstractAction
         $body = $rq->getParsedBody();
         $specialite = null;
         $idpatient = null;
+
+        $validator = Validator::key('specialite', Validator::optional(Validator::stringType()))
+            ->key('idpatient', Validator::optional(Validator::stringType()));
+
         try{
+            assert($validator);
             $rdv = $this->rdvInt->consulterRDV($rdv_id);
 
             try{
@@ -36,7 +40,7 @@ class ModifRdvAction extends AbstractAction
 
 
             }catch (\Exception $e){
-                $rs->getBody()->write(json_encode(['error' => 'test']));
+                $rs->getBody()->write(json_encode(['error' => 'erreur sur les parametres données']));
 
                 return $rs
                     ->withHeader('Content-Type', 'application/json')
@@ -45,11 +49,6 @@ class ModifRdvAction extends AbstractAction
 
 
             $modifrdv = $this->rdvInt->modifierRDV($rdv->ID,$idpatient, $specialite);
-
-
-
-
-
 
             $resultat= ["rendez-vous" => [
                 "id" => $modifrdv->ID,
