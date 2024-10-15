@@ -24,8 +24,16 @@ $app->addErrorMiddleware($c->get('displayErrorDetails'), false, false)
 //    ->forceContentType('application/json')
 ;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+try {
+    $envFiles = ['toubeelib.env', 'dbuser.env', 'toubeelibdb.env'];
+
+    foreach ($envFiles as $file) {
+        $dotenv = Dotenv::createImmutable(__DIR__, $file);
+        $dotenv->load();
+    }
+} catch (Exception $e) {
+    echo "Erreur lors du chargement du fichier .env : " . $e->getMessage();
+}
 
 
 $app = (require_once __DIR__ . '/routes.php')($app);

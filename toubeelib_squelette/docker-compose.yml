@@ -11,7 +11,7 @@ services:
     build:
       context: build
       dockerfile: 8.3-cli.Dockerfile
-    env_file: ./toubeelib.env
+    env_file: app/config/toubeelib.env
     ports:
       - '6080:80'
     volumes:
@@ -26,7 +26,7 @@ services:
     # service toubeelib.db : base de données postgresql
   toubeelib.db:
     image: 'postgres:latest'
-    env_file: ./toubeelibdb.env
+    env_file: app/config/toubeelibdb.env
     ports:
       - '5432:5432'
     networks:

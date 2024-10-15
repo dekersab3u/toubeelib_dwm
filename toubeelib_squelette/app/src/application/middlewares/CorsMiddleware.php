@@ -17,14 +17,14 @@ class CorsMiddleware
         $origin = $request->getHeaderLine('Origin');
         $methode = $request->getMethod();
         $header = $request->getHeaders();
-        $headerList = implode(', ', $header);
+        //$headerList = implode(', ', $header);
 
 
         $response = $handler->handle($request);
         $response = $response
             ->withHeader('Access-Control-Allow-Origin', $origin)
             ->withHeader('Access-Control-Allow-Methods', $methode )
-            ->withHeader('Access-Control-Allow-Headers',$headerList )
+            //->withHeader('Access-Control-Allow-Headers',$headerList )
             ->withHeader('Access-Control-Max-Age', 3600)
             ->withHeader('Access-Control-Allow-Credentials', 'true');
         return $response;
