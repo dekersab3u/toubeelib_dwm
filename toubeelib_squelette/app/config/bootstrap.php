@@ -3,6 +3,9 @@
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use toubeelib\application\middlewares\CorsMiddleware;
+use Dotenv\Dotenv;
+
+
 
 
 $builder = new ContainerBuilder();
@@ -20,6 +23,9 @@ $app->addErrorMiddleware($c->get('displayErrorDetails'), false, false)
 //    ->getDefaultErrorHandler()
 //    ->forceContentType('application/json')
 ;
+
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 
 $app = (require_once __DIR__ . '/routes.php')($app);
