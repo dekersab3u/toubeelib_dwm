@@ -29,6 +29,13 @@ class AuthProvider
 
         $accessToken = JWT::encode($payload, $_ENV['JWT_SECRET_KEY'], 'HS512');
 
+        return [
+            'access_token' => $accessToken,
+            'expires_in' => 3600, // Durée de validité du token (1 heure)
+            'user' => $user->email,
+            'role' => $user->role
+        ];
+
 
 
     }

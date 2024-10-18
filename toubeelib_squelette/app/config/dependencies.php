@@ -11,9 +11,19 @@ use \toubeelib\application\actions\ModifRdvAction;
 use \toubeelib\application\actions\AnnulerRdvAction;
 use \toubeelib\application\actions\PracticienDisponibiliteAction;
 use \toubeelib\core\services\praticien\ServicePraticienInterface;
+use toubeelib\application\actions\SignInAction;
+use toubeelib\core\services\auth\AuthProvider;
+use toubeelib\core\services\auth\AuthService;
 
 return [
 
+    PDO::class => function (ContainerInterface $c) {
+        $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', $_ENV['DB_HOST'], $_ENV['DB_PORT'],$_ENV['DB_NAME']);
+        return new PDO($dsn, $_ENV['POSTGRES_USER'], $_ENV['POSTGRES_PASSWORD'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+        ]);
+    },
 
     PraticienRepositoryInterface::class => function (ContainerInterface $c) {
         return new ArrayPraticienRepository();
@@ -34,6 +44,14 @@ return [
         return new \toubeelib\core\services\praticien\ServicePraticien($c->get(PraticienRepositoryInterface::class));
     },
 
+    AuthService::class => function (ContainerInterface $c) {
+      return new AuthService($c->get(PDO::class));
+    },
+
+    AuthProvider::class => function (ContainerInterface $c){
+        return new AuthProvider($c->get(AuthService::class));
+    },
+
     AccesRdvAction::class => function(ContainerInterface $c){
         return new AccesRdvAction($c->get(RdvServiceInterface::class));
     },
@@ -47,6 +65,10 @@ return [
 
     PracticienDisponibiliteAction::class => function (ContainerInterface $c){
         return new PracticienDisponibiliteAction($c->get(RdvServiceInterface::class), $c->get(ServicePraticienInterface::class));
+    },
+
+    SignInAction::class => function (ContainerInterface $c){
+        return new SignInAction($c->get(AuthProvider::class));
     }
 
 ];
