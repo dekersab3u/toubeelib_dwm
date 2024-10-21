@@ -18,14 +18,23 @@ class SignInAction extends AbstractAction
 
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
-        $body = $rq->getParseBody();
-        $email = $body['email'] ?? null;
-        $password = $body['password'] ?? null;
 
-        if(!$email || !$password){
-            $rs->getBody()->write(json_encode(['error' => 'email ou mdp non present']));
-            return $rs->withHeader('Content-Type', 'application/json')->withStatus(400);
+        try{
+            $body = $rq->getParsedBody();
+            $email = $body['email'] ?? null;
+            $password = $body['password'] ?? null;
+
+            if(!$email || !$password){
+                $rs->getBody()->write(json_encode(['error' => 'email ou mdp non present']));
+                return $rs->withHeader('Content-Type', 'application/json')->withStatus(400);
+            }
+        }catch(\Exception $e){
+            $rs->getBody()->write(json_encode(['error' => 'test']));
+            return $rs->withHeader('Content-Type', 'application/json')->withStatus(401);
         }
+
+
+
 
         try{
 
