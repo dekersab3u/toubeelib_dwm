@@ -27,7 +27,8 @@ return [
     },
 
     PraticienRepositoryInterface::class => function (ContainerInterface $c) {
-        return new ArrayPraticienRepository();
+        return new ArrayPraticienRepository($c->get(PDO::class));
+
     },
 
     RdvRepositoryInterface::class => function (ContainerInterface $c) {
