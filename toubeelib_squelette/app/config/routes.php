@@ -6,12 +6,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 return function( \Slim\App $app):\Slim\App {
 
+    $app->post('/rdvs', \toubeelib\application\actions\PriseRdvAction::class);
     $app->get('/', \toubeelib\application\actions\HomeAction::class);
     $app->get('/rdvs/{ID-RDV}', \toubeelib\application\actions\AccesRdvAction::class);
     $app->patch('/rdvs/{ID-RDV}', \toubeelib\application\actions\ModifRdvAction::class);
     $app->delete('/rdvs/{ID-RDV}', \toubeelib\application\actions\AnnulerRdvAction::class);
     $app->patch('/praticiens/{ID-PRA}', \toubeelib\application\actions\PracticienDisponibiliteAction::class);
     $app->post('/signin', \toubeelib\application\actions\SignInAction::class);
+
 
     $app->options('/{routes:.+}',
         function( Request $rq,

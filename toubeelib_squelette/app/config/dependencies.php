@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Container\ContainerInterface;
+use toubeelib\application\actions\PriseRdvAction;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
 use \toubeelib\core\services\rdv\RdvServiceInterface;
@@ -70,6 +71,10 @@ return [
 
     SignInAction::class => function (ContainerInterface $c){
         return new SignInAction($c->get(AuthProvider::class));
-    }
+    },
+
+    PriseRdvAction::class => function (ContainerInterface $c){
+        return new PriseRdvAction($c->get(RdvServiceInterface::class));
+    },
 
 ];
