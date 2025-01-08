@@ -41,7 +41,6 @@ class ServiceRDV implements RdvServiceInterface
     {
         try {
             $rdv = $this->rdvRep->getRdvById($ID);
-            $this->getPraticienRDV($rdv->ID_Praticien);
             return new rdvDTO($rdv);
         } catch(ServiceRdvInvalidDataException $e) {
             throw new ServiceRdvInvalidDataException("Invalid RDV ID");

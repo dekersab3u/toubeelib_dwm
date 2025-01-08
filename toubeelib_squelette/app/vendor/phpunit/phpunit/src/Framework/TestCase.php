@@ -100,7 +100,6 @@ use PHPUnit\Util\Test as TestUtil;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
-use SebastianBergmann\CodeCoverage\StaticAnalysisCacheNotConfiguredException;
 use SebastianBergmann\CodeCoverage\UnintentionallyCoveredCodeException;
 use SebastianBergmann\Comparator\Comparator;
 use SebastianBergmann\Comparator\Factory as ComparatorFactory;
@@ -347,7 +346,6 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
      * @throws Exception
      * @throws NoPreviousThrowableException
      * @throws ProcessIsolationException
-     * @throws StaticAnalysisCacheNotConfiguredException
      * @throws UnintentionallyCoveredCodeException
      *
      * @internal This method is not covered by the backward compatibility promise for PHPUnit
@@ -1974,25 +1972,47 @@ abstract class TestCase extends Assert implements Reorderable, SelfDescribing, T
      */
     private function getActiveErrorHandlers(): array
     {
-        $res = [];
+        $activeErrorHandlers = [];
 
         while (true) {
             $previousHandler = set_error_handler(static fn () => false);
+
             restore_error_handler();
 
             if ($previousHandler === null) {
                 break;
             }
-            $res[] = $previousHandler;
+
+            $activeErrorHandlers[] = $previousHandler;
+
             restore_error_handler();
         }
-        $res = array_reverse($res);
 
-        foreach ($res as $handler) {
+        $activeErrorHandlers      = array_reverse($activeErrorHandlers);
+        $invalidErrorHandlerStack = false;
+
+        foreach ($activeErrorHandlers as $handler) {
+            if (!is_callable($handler)) {
+                $invalidErrorHandlerStack = true;
+
+                continue;
+            }
+
             set_error_handler($handler);
         }
 
-        return $res;
+        if ($invalidErrorHandlerStack) {
+            $message = 'At least one error handler is not callable outside the scope it was registered in';
+
+            Event\Facade::emitter()->testConsideredRisky(
+                $this->valueObjectForEvents(),
+                $message,
+            );
+
+            $this->status = TestStatus::risky($message);
+        }
+
+        return $activeErrorHandlers;
     }
 
     /**

@@ -30,8 +30,9 @@ return [
     },
 
     RdvRepositoryInterface::class => function (ContainerInterface $c) {
-        return new ArrayRdvRepository();
+        return new ArrayRdvRepository($c->get(PDO::class));
     },
+
 
     RdvServiceInterface::class => function (ContainerInterface $c)
     {

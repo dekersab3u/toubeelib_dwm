@@ -11,9 +11,9 @@ services:
     build:
       context: build
       dockerfile: 8.3-cli.Dockerfile
-    env_file: app/config/toubeelib.env
+    env_file: app/config/token.env
     ports:
-      - '6080:80'
+      - '55321:80'
     volumes:
       - ./app:/var/php
     working_dir: /var/php
@@ -26,9 +26,9 @@ services:
     # service toubeelib.db : base de données postgresql
   toubeelib.db:
     image: 'postgres:latest'
-    env_file: app/config/toubeelibdb.env
+    env_file: app/config/postgres.env
     ports:
-      - '5432:5432'
+      - '55322:5432'
     networks:
       - toubeelib.net
     volumes:
@@ -39,7 +39,8 @@ services:
   adminer:
     image: adminer
     ports:
-      - '8080:8080'
+      - '55323:8080'
     networks:
       - toubeelib.net
+    command : php -S 0.0.0.0:8080 -t /var/www/html
 

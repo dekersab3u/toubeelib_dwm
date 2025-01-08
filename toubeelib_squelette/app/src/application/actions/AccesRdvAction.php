@@ -21,6 +21,7 @@ class AccesRdvAction extends AbstractAction
 
         try{
             $rdv = $this->rdvInt->consulterRDV($rdv_id);
+
             $resultat = ["rendez-vous" => [
                 "id" => $rdv->ID,
                 "id_patient" => $rdv->ID_Patient,
@@ -48,7 +49,7 @@ class AccesRdvAction extends AbstractAction
                 ->withStatus(200);
 
         }catch (\Exception $e){
-            $rs->getBody()->write(json_encode(['error' => 'Rendez-vous non trouvé']));
+            $rs->getBody()->write(json_encode(['error' => 'Rendez-vous non trouvé : ' . $rdv_id]));
 
             return $rs
                 ->withHeader('Content-Type', 'application/json')

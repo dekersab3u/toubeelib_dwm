@@ -2,6 +2,7 @@
 
 namespace toubeelib\infrastructure\repositories;
 
+use PDO;
 use Ramsey\Uuid\Uuid;
 use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\domain\entities\rdv\RendezVous;
@@ -10,51 +11,81 @@ use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class ArrayRdvRepository implements RdvRepositoryInterface
 {
-    private array $rdvs = [];
+    private PDO $pdo;
 
-    public function __construct() {
-            $r1 = new RendezVous('p1', 'pa1',  \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 09:00') );
-            $r1->setID('r1');
-            $r2 = new RendezVous('p1', 'pa1',  \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 10:00'));
-            $r2->setID('r2');
-            $r3 = new RendezVous('p1', 'pa1',  \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 14:00') );
-            $r3->setID('r3');
-            $r4 = new RendezVous('p1', 'pa1',  \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 16:30'));
-            $r4->setID('r4');
-            $r5 = new RendezVous('p2', 'pa1',  \DateTimeImmutable::createFromFormat('Y-m-d H:i','2024-09-02 09:30'));
-            $r5->setID('r5');
-
-        $this->rdvs  = ['r1'=> $r1, 'r2'=>$r2, 'r3'=> $r3, 'r4'=> $r4, 'r5'=> $r5];
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
     }
 
     public function getRdvById(string $id): RendezVous
     {
-        $rendezvous = $this->rdvs[$id] ??
-            throw new RepositoryEntityNotFoundException("Rendez-vous $id not found");
+        error_log("Looking for RDV with ID: " . $id);
+        $query = "SELECT id, id_patient, id_praticien, id_specialite, status, date_rdv FROM rdvs WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+        $stmt->execute();
 
-        return $rendezvous;
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        error_log("Query executed. Result: " . json_encode($row));
+
+        if (!$row) {
+            throw new RepositoryEntityNotFoundException("Rendez-vous $id not found");
+        }
+
+        $rdv = new RendezVous(
+            $row['id_praticien'],
+            $row['id_patient'],
+            new \DateTimeImmutable($row['date_rdv'])
+        );
+        $rdv->setID($row['id']);
+        $rdv->setStatus($row['status']);
+
+        return $rdv;
     }
+
+
 
     public function getPraticienById(string $id): Praticien
     {
-        $praticien = $this->praticiens[$id] ??
+        $query = "SELECT id, email, nom, prenom, tel FROM praticien WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
             throw new RepositoryEntityNotFoundException("Praticien $id not found");
+        }
+
+        $praticien = new Praticien(
+            $row['nom'],
+            $row['prenom'],
+            $row['adresse'],
+            $row['tel'],
+        );
 
         return $praticien;
     }
 
     public function getRdvsByPraticienId(string $id): array
     {
+        $query = "SELECT id, id_patient, id_praticien, id_specialite, status, date_rdv FROM rdvs WHERE id_praticien = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $rdvs = [];
-        foreach($this->rdvs as $rdv){
-            if($rdv->ID_Praticien == $id){
-                $rdvs[] = $rdv;
-            }
+        foreach ($rows as $row) {
+            $rdv = new RendezVous(
+                $row['id_praticien'],
+                $row['id_patient'],
+                new \DateTimeImmutable($row['date_rdv'])
+            );
+            $rdv->setID($row['id']);
+            $rdv->setStatus($row['status']);
+            $rdvs[] = $rdv;
         }
+
         return $rdvs;
     }
-
-
-
 }
-

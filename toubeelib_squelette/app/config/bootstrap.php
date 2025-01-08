@@ -25,7 +25,7 @@ $app->addErrorMiddleware($c->get('displayErrorDetails'), false, false)
 ;
 
 try {
-    $envFiles = ['toubeelib.env', 'dbuser.env', 'toubeelibdb.env'];
+    $envFiles = ['token.env', 'dbuser.env', 'postgres.env'];
 
     foreach ($envFiles as $file) {
         $dotenv = Dotenv::createImmutable(__DIR__, $file);
