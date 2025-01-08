@@ -2,6 +2,7 @@
 
 namespace toubeelib\infrastructure\repositories;
 
+use PDO;
 use Ramsey\Uuid\Uuid;
 use toubeelib\core\domain\entities\praticien\Praticien;
 use toubeelib\core\domain\entities\praticien\Specialite;
@@ -10,6 +11,12 @@ use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class ArrayPraticienRepository implements PraticienRepositoryInterface
 {
+    private PDO $pdo;
+
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
 
     const SPECIALITES = [
         'A' => [
@@ -41,7 +48,7 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
 
     private array $praticiens = [];
 
-    public function __construct() {
+    /*public function __construct() {
         $this->praticiens['p1'] = new Praticien( 'Dupont', 'Jean', 'nancy', '0123456789');
         $this->praticiens['p1']->addSpecialite(new Specialite('A', 'Dentiste', 'Spécialiste des dents'));
         $this->praticiens['p1']->addSpecialite(new Specialite('D', 'Généraliste', 'Médecin généraliste'));
@@ -55,26 +62,33 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         $this->praticiens['p3']->addSpecialite(new Specialite('C', 'Généraliste', 'Médecin généraliste'));
         $this->praticiens['p3']->setID('p3');
 
-    }
+    }*/
+
     public function getSpecialitesByPraticienId(string $id): array
     {
+        error_log("Looking for specialites of praticien with ID: " . $id);
+        $query = "SELECT id_spe FROM PraticienToSpecialite WHERE id_prat = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $praticien = $this->praticiens[$id] ??
+        if (!$rows) {
             throw new RepositoryEntityNotFoundException("Praticien avec l'ID $id non trouvé.");
+        }
 
-        $specialites = $praticien->specialites;
+        $specialites = $rows;
 
         if (empty($specialites)) {
             throw new RepositoryEntityNotFoundException("Aucune spécialité trouvée pour le praticien avec l'ID $id.");
         }
 
 
-        $specialitesDTO = [];
+        /*$specialitesDTO = [];
         foreach ($praticien->specialites as $specialite) {
             $specialitesDTO[] = new Specialite($specialite->getID(), $specialite->label, $specialite->description);
-        }
+        }*/
 
-        return $specialitesDTO;
+        return $specialites;
     }
 
 
