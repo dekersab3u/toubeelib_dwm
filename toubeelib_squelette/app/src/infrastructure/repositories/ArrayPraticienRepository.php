@@ -119,8 +119,23 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         return $praticien;
     }
 
+    public function getPraticiens(): array
+    {
+        $query = "SELECT email, nom, prenom, tel FROM praticien";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-
-
+        $praticiens = [];
+        foreach ($rows as $row) {
+            $praticien = new Praticien(
+                $row['email'],
+                $row['nom'],
+                $row['prenom'],
+                $row['tel'],
+            );
+            $praticiens[] = $praticien;
+        }
+        return $praticiens;
+    }
 }
