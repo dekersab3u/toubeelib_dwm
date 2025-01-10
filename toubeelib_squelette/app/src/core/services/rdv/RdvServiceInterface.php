@@ -6,6 +6,7 @@ use toubeelib\core\dto\rdvDTO;
 
 interface RdvServiceInterface
 {
+    public function consulterListeRDVS() : array;
     public function consulterRDV(string $ID) : rdvDTO;
 
     public function creerRDV(string $ID_Patient, string $ID_Praticien, string $specialite, \DateTimeImmutable $dateRdv) : rdvDTO;

@@ -18,13 +18,16 @@ class PriseRdvAction extends AbstractAction
     public function __invoke(ServerRequestInterface $rq, ResponseInterface $rs, array $args): ResponseInterface
     {
 
-        $data = $rq->getParsedBody();
+        $data = json_decode($rq->getBody()->getContents(), true);
+
         $idPra = $data['idPra'] ?? null;
         $idCli = $data['idCli'] ?? null;
         $specialite = $data['specialite'] ?? null;
-        $dateRdv = $data['dateRdv'] ?? null;
+        $dateRdvStr = $data['dateRdv'] ?? null;
+        $dateRdv = new \DateTimeImmutable($dateRdvStr);
+
         try{
-            $this->rdvInt->creerRDV($idPra, $idCli, $specialite, $dateRdv);
+            $this->rdvInt->creerRDV($idCli,$idPra,$specialite, $dateRdv);
             return $rs->withHeader('Content-Type', 'application/json')->withStatus(200);
         }catch(\Exception $e){
             $rs->getBody()->write(json_encode([

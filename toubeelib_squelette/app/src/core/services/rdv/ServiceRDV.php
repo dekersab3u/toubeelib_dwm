@@ -37,6 +37,21 @@ class ServiceRDV implements RdvServiceInterface
         $this->praRep = $p;
 
     }
+
+    public function consulterListeRDVs(): array
+    {
+        try {
+
+            $rdvs = $this->rdvRep->getRdvs();
+
+
+            return array_map(fn($rdv) => new rdvDTO($rdv), $rdvs);
+
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Erreur lors de la récupération des rendez-vous : " . $e->getMessage());
+        }
+    }
+
     public function consulterRDV(string $ID): rdvDTO
     {
         try {

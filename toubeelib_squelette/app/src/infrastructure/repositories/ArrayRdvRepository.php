@@ -18,6 +18,24 @@ class ArrayRdvRepository implements RdvRepositoryInterface
         $this->pdo = $pdo;
     }
 
+    public function getRdvs() : array{
+        $query = "SELECT id, id_patient, id_praticien, id_specialite, status, date_rdv FROM rdvs";
+        $stmt = $this->pdo->query($query);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_map(function ($row) {
+            $rdv = new RendezVous(
+                $row['id_patient'],
+                $row['id_praticien'],
+                new \DateTimeImmutable($row['date_rdv'])
+            );
+            $rdv->setID($row['id']);
+            $rdv->setStatus($row['status']);
+            $rdv->setSpecialite($row['id_specialite']);
+            return $rdv;
+        }, $rows);
+    }
+
     public function getRdvById(string $id): RendezVous
     {
         error_log("Looking for RDV with ID: " . $id);
