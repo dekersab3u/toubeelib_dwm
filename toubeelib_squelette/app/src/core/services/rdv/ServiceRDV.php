@@ -76,8 +76,9 @@ class ServiceRDV implements RdvServiceInterface
     {
         try {
 
-            $praticienSpecialites = $this->praRep->getSpecialitesByPraticienId($ID_Praticien);
+            $prat = $this->praRep->getPraticienById($ID_Praticien);
 
+            $praticienSpecialites = $this->praRep->getSpecialitesByPraticienId($ID_Praticien);
 
             $specialiteTrouvee = false;
             foreach ($praticienSpecialites as $specialite) {
