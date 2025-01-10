@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use toubeelib\core\services\rdv\RdvServiceInterface;
 
-class AccesRdvAction extends AbstractAction
+class AccesRdvByIdAction extends AbstractAction
 {
     private RdvServiceInterface $rdvInt;
 

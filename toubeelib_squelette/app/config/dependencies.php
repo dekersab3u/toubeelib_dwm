@@ -1,11 +1,12 @@
 <?php
 
 use Psr\Container\ContainerInterface;
+use toubeelib\application\actions\AccesRdvsAction;
 use toubeelib\application\actions\PriseRdvAction;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
 use \toubeelib\core\services\rdv\RdvServiceInterface;
-use \toubeelib\application\actions\AccesRdvAction;
+use \toubeelib\application\actions\AccesRdvByIdAction;
 use toubeelib\infrastructure\repositories\ArrayPraticienRepository;
 use toubeelib\infrastructure\repositories\ArrayRdvRepository;
 use \toubeelib\application\actions\ModifRdvAction;
@@ -55,8 +56,8 @@ return [
         return new AuthProvider($c->get(AuthService::class));
     },
 
-    AccesRdvAction::class => function(ContainerInterface $c){
-        return new AccesRdvAction($c->get(RdvServiceInterface::class));
+    AccesRdvByIdAction::class => function(ContainerInterface $c){
+        return new AccesRdvByIdAction($c->get(RdvServiceInterface::class));
     },
 
     ModifRdvAction::class => function (ContainerInterface $c) {
@@ -76,6 +77,10 @@ return [
 
     PriseRdvAction::class => function (ContainerInterface $c){
         return new PriseRdvAction($c->get(RdvServiceInterface::class));
+    },
+
+    AccesRdvsAction::class => function (ContainerInterface $c){
+        return new AccesRdvsAction($c->get(RdvServiceInterface::class));
     },
 
 ];
