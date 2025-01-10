@@ -18,52 +18,6 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         $this->pdo = $pdo;
     }
 
-    const SPECIALITES = [
-        'A' => [
-            'ID' => 'A',
-            'label' => 'Dentiste',
-            'description' => 'Spécialiste des dents'
-        ],
-        'B' => [
-            'ID' => 'B',
-            'label' => 'Ophtalmologue',
-            'description' => 'Spécialiste des yeux'
-        ],
-        'C' => [
-            'ID' => 'C',
-            'label' => 'Généraliste',
-            'description' => 'Médecin généraliste'
-        ],
-        'D' => [
-            'ID' => 'D',
-            'label' => 'Pédiatre',
-            'description' => 'Médecin pour enfants'
-        ],
-        'E' => [
-            'ID' => 'E',
-            'label' => 'Médecin du sport',
-            'description' => 'Maladies et trausmatismes liés à la pratique sportive'
-        ],
-    ];
-
-    private array $praticiens = [];
-
-    /*public function __construct() {
-        $this->praticiens['p1'] = new Praticien( 'Dupont', 'Jean', 'nancy', '0123456789');
-        $this->praticiens['p1']->addSpecialite(new Specialite('A', 'Dentiste', 'Spécialiste des dents'));
-        $this->praticiens['p1']->addSpecialite(new Specialite('D', 'Généraliste', 'Médecin généraliste'));
-        $this->praticiens['p1']->setID('p1');
-
-        $this->praticiens['p2'] = new Praticien( 'Durand', 'Pierre', 'vandeuve', '0123456789');
-        $this->praticiens['p2']->addSpecialite(new Specialite('B', 'Ophtalmologue', 'Spécialiste des yeux'));
-        $this->praticiens['p2']->setID('p2');
-
-        $this->praticiens['p3'] = new Praticien( 'Martin', 'Marie', '3lassou', '0123456789');
-        $this->praticiens['p3']->addSpecialite(new Specialite('C', 'Généraliste', 'Médecin généraliste'));
-        $this->praticiens['p3']->setID('p3');
-
-    }*/
-
     public function getSpecialitesByPraticienId(string $id): array
     {
         error_log("Looking for specialites of praticien with ID: " . $id);
