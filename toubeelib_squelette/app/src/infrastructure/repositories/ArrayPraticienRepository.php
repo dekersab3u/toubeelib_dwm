@@ -82,7 +82,6 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
             throw new RepositoryEntityNotFoundException("Aucune spécialité trouvée pour le praticien avec l'ID $id.");
         }
 
-
         /*$specialitesDTO = [];
         foreach ($praticien->specialites as $specialite) {
             $specialitesDTO[] = new Specialite($specialite->getID(), $specialite->label, $specialite->description);
@@ -94,23 +93,49 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
 
     public function save(Praticien $praticien): string
     {
-        // TODO : prévoir le cas d'une mise à jour - le praticient possède déjà un ID
+        // TODO : prévoir le cas d'une mise à jour - le praticien possède déjà un ID
 		$ID = Uuid::uuid4()->toString();
         $praticien->setID($ID);
-        $this->praticiens[$ID] = $praticien;
+        $stmt = $this->pdo->prepare("INSERT INTO praticien (id, email, nom, prenom, adresse, tel) VALUES (:id, :email, :nom, :prenom, :adresse, :tel)");
         return $ID;
     }
 
     public function getPraticienById(string $id): Praticien
     {
-        $praticien = $this->praticiens[$id] ??
-            throw new RepositoryEntityNotFoundException("Praticien $id not found");
-
+        //verifier que l'id est bien un uuid
+        if (!Uuid::isValid($id)) {
+            throw new RepositoryEntityNotFoundException("id praticien non valide");
+        }
+        $query = "SELECT email, nom, prenom, tel FROM praticien WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $praticien = new Praticien(
+            $row['nom'],
+            $row['prenom'],
+            $row['adresse'],
+            $row['tel'],
+        );
         return $praticien;
     }
 
+    public function getPraticiens(): array
+    {
+        $query = "SELECT email, nom, prenom, tel FROM praticien";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-
-
+        $praticiens = [];
+        foreach ($rows as $row) {
+            $praticien = new Praticien(
+                $row['email'],
+                $row['nom'],
+                $row['prenom'],
+                $row['tel'],
+            );
+            $praticiens[] = $praticien;
+        }
+        return $praticiens;
+    }
 }
