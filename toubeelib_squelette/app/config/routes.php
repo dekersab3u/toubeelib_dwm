@@ -9,6 +9,7 @@ return function( \Slim\App $app):\Slim\App {
     $app->get('/rdvs', \toubeelib\application\actions\AccesRdvsAction::class);
     $app->post('/rdvs', \toubeelib\application\actions\PriseRdvAction::class);
     $app->get('/', \toubeelib\application\actions\HomeAction::class);
+    $app->get('/praticiens', \toubeelib\application\actions\GetPraticiens::class);
     $app->get('/praticien/{ID-PRA}', \toubeelib\application\actions\GetPraticienByID::class);
     $app->get('/rdvs/{ID-RDV}', \toubeelib\application\actions\AccesRdvByIdAction::class);
     $app->patch('/rdvs/{ID-RDV}', \toubeelib\application\actions\ModifRdvAction::class);

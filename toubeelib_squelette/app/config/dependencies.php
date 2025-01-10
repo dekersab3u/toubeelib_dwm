@@ -17,6 +17,7 @@ use toubeelib\application\actions\SignInAction;
 use toubeelib\core\services\auth\AuthProvider;
 use toubeelib\core\services\auth\AuthService;
 use toubeelib\application\actions\GetPraticienByID;
+use toubeelib\application\actions\GetPraticiens;
 
 return [
 
@@ -86,6 +87,10 @@ return [
 
     GetPraticienByID::class => function (ContainerInterface $c){
         return new GetPraticienByID($c->get(ServicePraticienInterface::class));
+    },
+
+    GetPraticiens::class => function (ContainerInterface $c) {
+        return new GetPraticiens($c->get(ServicePraticienInterface::class));
     }
 
 ];
