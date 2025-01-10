@@ -92,11 +92,9 @@ class ServiceRDV implements RdvServiceInterface
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas à celles du praticien.");
             }
 
-
             $dateDebut = new \DateTime($dateRdv->format('Y-m-d 00:00:00'));
             $dateFin = new \DateTime($dateRdv->format('Y-m-d 23:59:59'));
             $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateDebut, $dateFin);
-
 
             $rdvDispo = false;
             foreach ($dispos as $dispo) {
@@ -130,8 +128,13 @@ class ServiceRDV implements RdvServiceInterface
 
     public function annulerRDV(string $ID)
     {
-        $rdv = $this->rdvRep->getRdvById($ID);
-        $rdv->setStatus('Annule');
+        try {
+            $rdv = $this->rdvRep->getRdvById($ID);
+            $rdv->setStatus('annulé');
+            $rdv->save();
+        } catch (ServiceRdvInvalidDataException $e) {
+            throw new ServiceRdvInvalidDataException("Rendez-vous non trouvé avec l'ID: $ID");
+        }
     }
 
     public function listeDisponibilitesPraticien(string $ID_Praticien, \DateTime $dateDebut, \DateTime $dateFin): array
