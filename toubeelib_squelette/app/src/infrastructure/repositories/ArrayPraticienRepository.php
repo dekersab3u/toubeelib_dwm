@@ -106,16 +106,17 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
         if (!Uuid::isValid($id)) {
             throw new RepositoryEntityNotFoundException("id praticien non valide");
         }
-        $query = "SELECT email, nom, prenom, tel FROM praticien WHERE id = :id";
+        $query = "SELECT id,email, nom, prenom, tel FROM praticien WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $praticien = new Praticien(
             $row['nom'],
             $row['prenom'],
-            $row['adresse'],
+            $row['email'],
             $row['tel'],
         );
+        $praticien->setID($row['id']);
         return $praticien;
     }
 

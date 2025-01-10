@@ -16,6 +16,7 @@ use \toubeelib\core\services\praticien\ServicePraticienInterface;
 use toubeelib\application\actions\SignInAction;
 use toubeelib\core\services\auth\AuthProvider;
 use toubeelib\core\services\auth\AuthService;
+use toubeelib\application\actions\GetPraticienByID;
 
 return [
 
@@ -82,5 +83,9 @@ return [
     AccesRdvsAction::class => function (ContainerInterface $c){
         return new AccesRdvsAction($c->get(RdvServiceInterface::class));
     },
+
+    GetPraticienByID::class => function (ContainerInterface $c){
+        return new GetPraticienByID($c->get(ServicePraticienInterface::class));
+    }
 
 ];
