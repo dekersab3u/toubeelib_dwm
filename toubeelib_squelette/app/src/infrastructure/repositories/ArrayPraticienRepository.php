@@ -66,26 +66,31 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
 
     public function getSpecialitesByPraticienId(string $id): array
     {
-        error_log("Looking for specialites of praticien with ID: " . $id);
-        $query = "SELECT id_spe FROM PraticienToSpecialite WHERE id_prat = :id";
+        if (!Uuid::isValid($id)) {
+            throw new RepositoryEntityNotFoundException("id praticien non valide");
+        }
+        $query = "
+        SELECT s.id AS id_spe, s.label, s.description
+        FROM PraticienToSpecialite pts
+        JOIN Specialite s ON pts.id_spe = s.id
+        WHERE pts.id_prat = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['id' => $id]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!$rows) {
-            throw new RepositoryEntityNotFoundException("Praticien avec l'ID $id non trouvé.");
-        }
-
-        $specialites = $rows;
-
-        if (empty($specialites)) {
             throw new RepositoryEntityNotFoundException("Aucune spécialité trouvée pour le praticien avec l'ID $id.");
         }
 
-        /*$specialitesDTO = [];
-        foreach ($praticien->specialites as $specialite) {
-            $specialitesDTO[] = new Specialite($specialite->getID(), $specialite->label, $specialite->description);
-        }*/
+
+        $specialites = [];
+        foreach ($rows as $row) {
+            $specialites[] = new Specialite(
+                $row['id_spe'],
+                $row['label'],
+                $row['description']
+            );
+        }
 
         return $specialites;
     }
@@ -102,11 +107,11 @@ class ArrayPraticienRepository implements PraticienRepositoryInterface
 
     public function getPraticienById(string $id): Praticien
     {
-        //verifier que l'id est bien un uuid
+
         if (!Uuid::isValid($id)) {
             throw new RepositoryEntityNotFoundException("id praticien non valide");
         }
-        $query = "SELECT email, nom, prenom, tel FROM praticien WHERE id = :id";
+        $query = "SELECT id,email, nom, prenom, tel FROM praticien WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -9,6 +9,7 @@ use toubeelib\core\domain\entities\rdv\RendezVous;
 use toubeelib\core\dto\InputPraticienDTO;
 use toubeelib\core\dto\PraticienDTO;
 use toubeelib\core\dto\rdvDTO;
+use toubeelib\core\repositoryInterfaces\PatientRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
 use toubeelib\core\services\praticien\ServicePraticien;
@@ -31,6 +32,8 @@ class ServiceRDV implements RdvServiceInterface
 
     private RdvRepositoryInterface $rdvRep;
     private PraticienRepositoryInterface $praRep;
+
+    private PatientRepositoryInterface $patRep;
 
     public function __construct(RdvRepositoryInterface $rdvRep, PraticienRepositoryInterface $p) {
         $this->rdvRep = $rdvRep;
@@ -63,6 +66,16 @@ class ServiceRDV implements RdvServiceInterface
 
     }
 
+    public function consulterRdvsPraticien(string $ID): array
+    {
+        try {
+            $rdvs = $this->rdvRep->getRdvsByPraticienId($ID);
+            return array_map(fn($rdv) => new rdvDTO($rdv), $rdvs);
+        } catch(ServiceRdvInvalidDataException $e) {
+            throw new ServiceRdvInvalidDataException("Invalid Praticien ID");
+        }
+    }
+
     public function getPraticienRDV(string $ID){
         try{
             $praticien = $this->praRep->getPraticienById($ID);
@@ -76,55 +89,46 @@ class ServiceRDV implements RdvServiceInterface
     {
         try {
 
-            $praticienSpecialites = $this->praRep->getSpecialitesByPraticienId($ID_Praticien);
-
-
-            $specialiteTrouvee = false;
-            foreach ($praticienSpecialites as $specialite) {
-                if ($specialite->toDTO()->label === $specialiteLabel) {
-                    $specialiteTrouvee = true;
-                    break;
-                }
+            $praticien = $this->praRep->getPraticienById($ID_Praticien);
+            if (!$praticien) {
+                throw new ServiceRdvInvalidDataException("Le praticien avec l'ID $ID_Praticien n'existe pas.");
             }
 
-            if (!$specialiteTrouvee) {
+            $client = $this->patRep->getPatientById($ID_Patient);
+            if (!$client) {
+                throw new ServiceRdvInvalidDataException("Le client avec l'ID $ID_Patient n'existe pas.");
+            }
+
+            $praticienSpecialites = $this->praRep->getSpecialitesByPraticienId($ID_Praticien);
+
+            if (!in_array($specialiteLabel, array_map(fn($s) => $s->toDTO()->label, $praticienSpecialites))) {
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas à celles du praticien.");
             }
 
-
             $dateDebut = new \DateTime($dateRdv->format('Y-m-d 00:00:00'));
             $dateFin = new \DateTime($dateRdv->format('Y-m-d 23:59:59'));
+
             $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateDebut, $dateFin);
 
-
-            $rdvDispo = false;
-            foreach ($dispos as $dispo) {
-                if ($dispo->format('Y-m-d H:i') === $dateRdv->format('Y-m-d H:i')) {
-                    $rdvDispo = true;
-                    break;
-                }
-            }
-
-            if (!$rdvDispo) {
+            if (!in_array($dateRdv->format('Y-m-d H:i'), array_map(fn($d) => $d->format('Y-m-d H:i'), $dispos))) {
                 throw new ServiceRdvInvalidDataException("Le créneau du rendez-vous n'est pas disponible.");
             }
 
-        } catch (ServicePraticienInvalidDataException $e) {
-            throw new ServiceRdvInvalidDataException("Praticien non valide : " . $e->getMessage());
+
+            $rdv = new RendezVous($ID_Patient, $ID_Praticien, $dateRdv);
+            $rdv->setID(Uuid::uuid4()->toString());
+            $rdv->setSpecialite($specialiteLabel);
+
+
+            $this->rdvRep->save($rdv);
+
+            return $rdv->toDTO();
+
+        } catch (\Exception $e) {
+            throw new ServiceRdvInvalidDataException("Erreur lors de la création du rendez-vous : " . $e->getMessage());
         }
-
-
-        $rdv = new RendezVous($ID_Patient, $ID_Praticien, $dateRdv);
-
-
-        $rdv->setID(Uuid::uuid4()->toString());
-
-
-        $rdv->setSpecialite($specialiteLabel);
-
-
-        return $rdv->toDTO();
     }
+
 
 
     public function annulerRDV(string $ID)

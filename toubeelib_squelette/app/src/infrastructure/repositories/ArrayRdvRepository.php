@@ -106,4 +106,20 @@ class ArrayRdvRepository implements RdvRepositoryInterface
 
         return $rdvs;
     }
+
+    public function save(RendezVous $rdv): void
+    {
+        $query = "INSERT INTO rdvs (id, id_patient, id_praticien, id_specialite, date_rdv, status) 
+              VALUES (:id, :id_patient, :id_praticien, :id_specialite, :date_rdv, :status)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            'id' => $rdv->getID(),
+            'id_patient' => $rdv->getID_Patient(),
+            'id_praticien' => $rdv->getID_Praticien(),
+            'id_specialite' => $rdv->getSpecialite(),
+            'date_rdv' => $rdv->getDateRdv()->format('Y-m-d H:i:s'),
+            'status' => $rdv->getStatus(),
+        ]);
+    }
+
 }

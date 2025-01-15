@@ -2,27 +2,31 @@
 
 namespace toubeelib\core\domain\entities\Patient;
 
+use Cassandra\Timestamp;
 use Respect\Validation\Rules\Date;
 use toubeelib\core\domain\entities\Entity;
 
 class Patient extends Entity {
 
-    protected ?string $ID;
-    protected string $firstName;
-    protected string $lastName;
-    protected Date $birthDate;
     protected string $email;
+    protected int $role;
+    protected string $nom;
+    protected string $prenom;
+    protected timestamp $dateNais;
 
-    //protected Dossier $dossier;
 
-    public function __construct(string $id, string $firstName, string $lastName, Date $birthDate, string $email) {
-        $this->ID = $id;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->birthDate = $birthDate;
+
+    public function __construct(string $email, int $role, string $nom, string $prenom, timestamp $dateNais)
+    {
         $this->email = $email;
-
+        $this->role = $role;
+        $this->nom = $nom;
+        $this->prenom = $prenom;
+        $this->dateNais = $dateNais;
     }
+
+
+
 
     public function getID(): string {
         return $this->ID;

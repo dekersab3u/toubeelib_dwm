@@ -2,20 +2,43 @@
 
 namespace toubeelib\infrastructure\repositories;
 
-use toubeelib\core\domain\entities\Patient;
+use PDO;
+use Ramsey\Uuid\Uuid;
+use toubeelib\core\domain\entities\Patient\Patient;
 use toubeelib\core\repositoryInterfaces\PatientRepositoryInterface;
+use toubeelib\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
 class ArrayPatientRepository implements PatientRepositoryInterface {
 
-    private array $patients = [];
+    private PDO $pdo;
 
-    public function __construct(array $patients = []) {
-        $this->patients['pa1'] = new Patient('pa1', "jean", "dupont", new \DateTimeImmutable('1980-05-15'), "jdupont@hottemail.com");
-        $this->patients['pa2'] = new Patient('pa2', "Marie", "Durand", new \DateTimeImmutable('1975-03-10'), "mdurand@mail.com");
-        $this->patients['pa3'] = new Patient('pa3', "Luc", "Martin", new \DateTimeImmutable('1990-07-22'), "lmartin@example.com");
-        $this->patients['pa4'] = new Patient('pa4', "Sophie", "Bernard", new \DateTimeImmutable('1988-11-30'), "sbernard@webmail.com");
-        $this->patients['pa5'] = new Patient('pa5', "Paul", "Lefevre", new \DateTimeImmutable('2000-01-18'), "plefevre@domain.fr");
-        $this->patients['pa6'] = new Patient('pa6', "Julie", "Moreau", new \DateTimeImmutable('1995-06-02'), "jmoreau@fakemail.com");
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
+    }
 
+    public function getPatientById(string $id): Patient
+    {
+        if (!Uuid::isValid($id)) {
+            throw new RepositoryEntityNotFoundException("id patient non valide");
+        }
+        $query = "SELECT id,email, role, nom, prenom, dateNais FROM patient WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) {
+            throw new RepositoryEntityNotFoundException("Aucun patient trouvé avec l'ID $id.");
+        }
+        $patient = new Patient(
+            $row['email'],
+            $row['role'],
+            $row['nom'],
+            $row['prenom'],
+            $row['dateNais'],
+        );
+
+        return $patient;
     }
 }
+
+

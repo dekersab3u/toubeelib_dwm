@@ -49,6 +49,44 @@ class RendezVous extends Entity
         $this->specialite = $specialite;
     }
 
+    public function getID_Patient(): string
+    {
+        return $this->ID_Patient;
+    }
+
+    public function getID_Praticien(): string
+    {
+        return $this->ID_Praticien;
+    }
+
+    public function getSpecialite(): string
+    {
+        return $this->specialite;
+    }
+
+    public function getDateRdv(): \DateTimeImmutable
+    {
+        return $this->dateRdv;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function getID(): string
+    {
+        return $this->ID;
+    }
+
+    public function setID(string $ID): void
+    {
+        $this->ID = $ID;
+    }
+
+
+
+
 
 
 }

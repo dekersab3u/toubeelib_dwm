@@ -2,11 +2,14 @@
 
 use Psr\Container\ContainerInterface;
 use toubeelib\application\actions\AccesRdvsAction;
+use toubeelib\application\actions\AccesRdvsByPraticienIdAction;
 use toubeelib\application\actions\PriseRdvAction;
+use toubeelib\core\repositoryInterfaces\PatientRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
 use \toubeelib\core\services\rdv\RdvServiceInterface;
 use \toubeelib\application\actions\AccesRdvByIdAction;
+use toubeelib\infrastructure\repositories\ArrayPatientRepository;
 use toubeelib\infrastructure\repositories\ArrayPraticienRepository;
 use toubeelib\infrastructure\repositories\ArrayRdvRepository;
 use \toubeelib\application\actions\ModifRdvAction;
@@ -30,6 +33,10 @@ return [
     PraticienRepositoryInterface::class => function (ContainerInterface $c) {
         return new ArrayPraticienRepository($c->get(PDO::class));
 
+    },
+
+    PatientRepositoryInterface::class => function(ContainerInterface $c){
+        return new ArrayPatientRepository($c->get(PDO::class));
     },
 
     RdvRepositoryInterface::class => function (ContainerInterface $c) {
@@ -82,5 +89,9 @@ return [
     AccesRdvsAction::class => function (ContainerInterface $c){
         return new AccesRdvsAction($c->get(RdvServiceInterface::class));
     },
+
+    AccesRdvsByPraticienIdAction::class => function(ContainerInterface $c){
+        return new AccesRdvsByPraticienIdAction($c->get(RdvServiceInterface::class));
+    }
 
 ];

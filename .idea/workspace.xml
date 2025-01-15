@@ -5,14 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3eb3674c-6fdf-4727-87a8-712e8da61547" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/AccesRdvsAction.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/AccesRdvsByPraticienIdAction.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/dto/PatientDTO.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/config/dependencies.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/config/dependencies.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/config/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/AccesRdvAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/AccesRdvByIdAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/repositoryInterfaces/RdvRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/repositoryInterfaces/RdvRepositoryInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/rdv/RdvServiceInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/rdv/RdvServiceInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/PriseRdvAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/PriseRdvAction.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/patient/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/patient/Patient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/rdv/RendezVous.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/rdv/RendezVous.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/repositoryInterfaces/PatientRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/repositoryInterfaces/PatientRepositoryInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/rdv/ServiceRDV.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/rdv/ServiceRDV.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPatientRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPatientRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPraticienRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPraticienRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayRdvRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayRdvRepository.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,7 +98,8 @@
       <option name="presentableId" value="Default" />
       <updated>1736323431536</updated>
       <workItem from="1736323432621" duration="19650000" />
-      <workItem from="1736351143152" duration="4783000" />
+      <workItem from="1736351143152" duration="10867000" />
+      <workItem from="1736703122291" duration="111000" />
     </task>
     <servers />
   </component>
