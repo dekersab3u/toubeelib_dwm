@@ -35,10 +35,10 @@ class ServiceRDV implements RdvServiceInterface
 
     private PatientRepositoryInterface $patRep;
 
-    public function __construct(RdvRepositoryInterface $rdvRep, PraticienRepositoryInterface $p) {
+    public function __construct(RdvRepositoryInterface $rdvRep, PraticienRepositoryInterface $praRep, PatientRepositoryInterface $patRep) {
         $this->rdvRep = $rdvRep;
-        $this->praRep = $p;
-
+        $this->praRep = $praRep;
+        $this->patRep = $patRep;
     }
 
     public function consulterListeRDVs(): array
@@ -101,8 +101,18 @@ class ServiceRDV implements RdvServiceInterface
 
             $praticienSpecialites = $this->praRep->getSpecialitesByPraticienId($ID_Praticien);
 
-            if (!in_array($specialiteLabel, array_map(fn($s) => $s->toDTO()->label, $praticienSpecialites))) {
+            $specialiteTrouvee = false;
+            foreach ($praticienSpecialites as $specialite) {
+                if ($specialite->toDTO()->label === $specialiteLabel) {
+                    $specialiteTrouvee = true;
+                    break;
+                }
+            }
+
+            if (!$specialiteTrouvee) {
+                if (!in_array($specialiteLabel, array_map(fn($s) => $s->toDTO()->label, $praticienSpecialites))) {
                 throw new ServiceRdvInvalidDataException("La spécialité spécifiée ne correspond pas à celles du praticien.");
+                }
             }
 
             $dateDebut = new \DateTime($dateRdv->format('Y-m-d 00:00:00'));
@@ -111,6 +121,16 @@ class ServiceRDV implements RdvServiceInterface
             $dispos = $this->listeDisponibilitesPraticien($ID_Praticien, $dateDebut, $dateFin);
 
             if (!in_array($dateRdv->format('Y-m-d H:i'), array_map(fn($d) => $d->format('Y-m-d H:i'), $dispos))) {
+                $rdvDispo = false;
+                foreach ($dispos as $dispo) {
+                    if ($dispo->format('Y-m-d H:i') === $dateRdv->format('Y-m-d H:i')) {
+                        $rdvDispo = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!$rdvDispo) {
                 throw new ServiceRdvInvalidDataException("Le créneau du rendez-vous n'est pas disponible.");
             }
 
@@ -124,7 +144,7 @@ class ServiceRDV implements RdvServiceInterface
 
             return $rdv->toDTO();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new ServiceRdvInvalidDataException("Erreur lors de la création du rendez-vous : " . $e->getMessage());
         }
     }
@@ -133,8 +153,13 @@ class ServiceRDV implements RdvServiceInterface
 
     public function annulerRDV(string $ID)
     {
-        $rdv = $this->rdvRep->getRdvById($ID);
-        $rdv->setStatus('Annule');
+        try {
+            $rdv = $this->rdvRep->getRdvById($ID);
+            $rdv->setStatus('annulé');
+            $rdv->save();
+        } catch (ServiceRdvInvalidDataException $e) {
+            throw new ServiceRdvInvalidDataException("Rendez-vous non trouvé avec l'ID: $ID");
+        }
     }
 
     public function listeDisponibilitesPraticien(string $ID_Praticien, \DateTime $dateDebut, \DateTime $dateFin): array

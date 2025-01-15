@@ -5,19 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3eb3674c-6fdf-4727-87a8-712e8da61547" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/AccesRdvsByPraticienIdAction.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/dto/PatientDTO.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/GetPraticienByID.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/GetPraticiens.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/tests/csv_test.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/tests/praticien.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toubeelib_squelette/app/tests/sql.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/config/dependencies.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/config/dependencies.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/config/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/PriseRdvAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/PriseRdvAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/patient/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/patient/Patient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/rdv/RendezVous.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/domain/entities/rdv/RendezVous.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/repositoryInterfaces/PatientRepositoryInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/repositoryInterfaces/PatientRepositoryInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticien.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticien.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticienInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticienInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/rdv/ServiceRDV.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/rdv/ServiceRDV.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPatientRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPatientRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPraticienRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayPraticienRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayRdvRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/infrastructure/repositories/ArrayRdvRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/InstalledVersions.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/InstalledVersions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/autoload_classmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/autoload_classmap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/autoload_static.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/installed.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/vendor/composer/installed.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,20 +45,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Docker.toubeelib_squelette.adminer: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/ProjPHP/toubeelib_dwm&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.toubeelib_squelette.adminer: Compose Deployment.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merging main",
+    "last_opened_file_path": "C:/ProjPHP/toubeelib_dwm",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
@@ -100,6 +105,7 @@
       <workItem from="1736323432621" duration="19650000" />
       <workItem from="1736351143152" duration="10867000" />
       <workItem from="1736703122291" duration="111000" />
+      <workItem from="1736946728038" duration="829000" />
     </task>
     <servers />
   </component>
