@@ -45,12 +45,11 @@ services:
       context: build
       dockerfile: 8.3-cli.Dockerfile
     ports:
-      - '55324:80'
+      - '55326:80'
     volumes:
-      - ./gateway:/var/gateway
-    working_dir: /var/gateway
+      - ./gateway:/var/php
     networks:
       - toubeelib.net
     depends_on:
       - api.toubeelib
-    command: php -S 0.0.0.0:80 -t /var/gateway
+    command: php -S 0.0.0.0:80 -t /var/php/public

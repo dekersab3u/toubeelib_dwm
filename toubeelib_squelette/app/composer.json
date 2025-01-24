@@ -12,7 +12,7 @@
     "php-di/slim-bridge": "^3.4",
     "respect/validation": "^2.3.7",
     "ext-pdo": "*",
-    "vlucas/phpdotenv": "^5.4",
+    "vlucas/phpdotenv": "^5.4"
 
   },
   "require-dev": {

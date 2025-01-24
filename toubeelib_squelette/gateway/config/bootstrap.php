@@ -12,6 +12,9 @@ $c = $builder->build();
 
 $app = AppFactory::createFromContainer($c);
 
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+
+
 $app = (require_once __DIR__ . '/routes.php')($app);
 
 

@@ -37,7 +37,7 @@ class GetPraticiens extends AbstractAction
                 ->withStatus(200);
 
         }catch(\Exception $e){
-            $rs->getBody()->write(json_encode(['error' => 'Probleme lors de la generation']));
+            $rs->getBody()->write(json_encode(['error' => 'Probleme lors de la generation' . $e->getMessage()]));
 
             return $rs
                 ->withHeader('Content-Type', 'application/json')
