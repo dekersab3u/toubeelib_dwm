@@ -41,7 +41,9 @@ services:
 
   # API Gateway
   api.gateway:
-    image: 'php:8.3-cli'
+    build:
+      context: build
+      dockerfile: 8.3-cli.Dockerfile
     ports:
       - '55324:80'
     volumes:
