@@ -4,7 +4,7 @@ namespace rdv\application\actions;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use toubeelib\core\services\rdv\RdvServiceInterface;
+use rdv\core\services\rdv\RdvServiceInterface;
 
 class AccesRdvsAction extends AbstractAction
 {

@@ -2,12 +2,12 @@
 
 namespace rdv\application\actions;
 
-use _PHPStan_9815bbba4\Nette\Utils\DateTime;
+use DateTime;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use toubeelib\application\actions\AbstractAction;
-use toubeelib\core\services\praticien\ServicePraticienInterface;
-use toubeelib\core\services\rdv\RdvServiceInterface;
+use rdv\application\actions\AbstractAction;
+use rdv\core\services\praticien\ServicePraticienInterface;
+use rdv\core\services\rdv\RdvServiceInterface;
 use Respect\Validation\Validator;
 
 class PracticienDisponibiliteAction extends AbstractAction
