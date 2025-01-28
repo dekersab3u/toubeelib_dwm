@@ -13,6 +13,7 @@ return function( \Slim\App $app):\Slim\App {
     $app->delete('/rdvs/{ID-RDV}', \rdv\application\actions\AnnulerRdvAction::class);
     $app->patch('/praticiens/{ID-PRA}', \rdv\application\actions\PracticienDisponibiliteAction::class);
     $app->get('/praticiens/{ID-PRA}/rdvs', \rdv\application\actions\AccesRdvsByPraticienIdAction::class);
+    $app->get('/patients', \toubeelib\application\actions\GetPatients::class);
 
 
     return $app;
