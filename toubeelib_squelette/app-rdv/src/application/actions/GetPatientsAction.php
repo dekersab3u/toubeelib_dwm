@@ -4,8 +4,8 @@ namespace rdv\application\actions;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use rdv\core\services\patient\ServicePatient;
 use rdv\core\services\patient\ServicePatientInterface;
-use toubeelib\core\services\rdv\RdvServiceInterface;
 
 class GetPatientsAction extends AbstractAction
 {

@@ -3,6 +3,7 @@
 use Psr\Container\ContainerInterface;
 use rdv\application\actions\AccesRdvsAction;
 use rdv\application\actions\AccesRdvsByPraticienIdAction;
+use rdv\application\actions\GetPatientsAction;
 use rdv\application\actions\PriseRdvAction;
 use rdv\core\repositoryInterfaces\PatientRepositoryInterface;
 use rdv\core\repositoryInterfaces\PraticienRepositoryInterface;
@@ -17,7 +18,6 @@ use rdv\application\actions\ModifRdvAction;
 use rdv\application\actions\AnnulerRdvAction;
 use rdv\application\actions\PracticienDisponibiliteAction;
 use rdv\core\services\praticien\ServicePraticienInterface;
-use toubeelib\application\actions\GetPatients;
 use toubeelib\core\services\auth\AuthProvider;
 use toubeelib\core\services\auth\AuthService;
 
@@ -90,8 +90,8 @@ return [
         return new AccesRdvsByPraticienIdAction($c->get(RdvServiceInterface::class));
     },
 
-    GetPatients::class => function (ContainerInterface $c) {
-        return new GetPatients($c->get(ServicePatientInterface::class));
+    GetPatientsAction::class => function (ContainerInterface $c) {
+        return new GetPatientsAction($c->get(ServicePatientInterface::class));
     }
 
 ];

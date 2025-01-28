@@ -11,6 +11,5 @@ use rdv\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 interface ServicePatientInterface {
     public function getPatients(): array;
     public function getPatientById(string $id): PatientDTO;
-
     public function createPatient(InputPatientDTO $p): PatientDTO;
 }
