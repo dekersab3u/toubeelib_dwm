@@ -4,7 +4,7 @@
 namespace rdv\core\dto;
 
 use Cassandra\Timestamp;
-use rdv\core\domain\entities\Patient\Patient;
+use rdv\core\domain\entities\patient\Patient;
 use rdv\core\domain\entities\praticien\Praticien;
 use rdv\core\dto\DTO;
 
@@ -17,7 +17,7 @@ class PatientDTO extends DTO
     protected string $nom;
     protected string $prenom;
 
-    protected timestamp $dateNais;
+    //protected timestamp $dateNais;
 
     public function __construct(Patient $p)
     {
@@ -26,8 +26,9 @@ class PatientDTO extends DTO
         $this->role = $p->role;
         $this->nom = $p->nom;
         $this->prenom = $p->prenom;
-        $this->dateNais = $p->dateNais;
+        //$this->dateNais = $p->dateNais;
     }
+
 
 
 }

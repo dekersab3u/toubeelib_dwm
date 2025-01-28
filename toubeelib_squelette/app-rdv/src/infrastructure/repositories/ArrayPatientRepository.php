@@ -4,7 +4,7 @@ namespace rdv\infrastructure\repositories;
 
 use PDO;
 use Ramsey\Uuid\Uuid;
-use rdv\core\domain\entities\Patient\Patient;
+use rdv\core\domain\entities\patient\Patient;
 use rdv\core\repositoryInterfaces\PatientRepositoryInterface;
 use rdv\core\repositoryInterfaces\RepositoryEntityNotFoundException;
 
@@ -22,7 +22,7 @@ class ArrayPatientRepository implements PatientRepositoryInterface {
         if (!Uuid::isValid($id)) {
             throw new RepositoryEntityNotFoundException("id patient non valide");
         }
-        $query = "SELECT id,email, role, nom, prenom, dateNais FROM patient WHERE id = :id";
+        $query = "SELECT id,email, role, nom, prenom, dateNaiss FROM patient WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -34,7 +34,7 @@ class ArrayPatientRepository implements PatientRepositoryInterface {
             $row['role'],
             $row['nom'],
             $row['prenom'],
-            $row['dateNais'],
+            $row['dateNaiss'],
         );
 
         return $patient;
@@ -42,7 +42,7 @@ class ArrayPatientRepository implements PatientRepositoryInterface {
 
     public function getPatients(): array
     {
-        $query = "SELECT id,email, role, nom, prenom, dateNais FROM patient";
+        $query = "SELECT id, email, role, nom, prenom FROM patient";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -54,7 +54,6 @@ class ArrayPatientRepository implements PatientRepositoryInterface {
                 $row['role'],
                 $row['nom'],
                 $row['prenom'],
-                $row['dateNais'],
             );
         }
 

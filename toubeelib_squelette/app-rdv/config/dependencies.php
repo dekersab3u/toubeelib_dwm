@@ -54,6 +54,13 @@ return [
         return new \rdv\core\services\praticien\ServicePraticien($c->get(PraticienRepositoryInterface::class));
     },
 
+    ServicePatientInterface::class => function (ContainerInterface $c) {
+        return new \rdv\core\services\patient\ServicePatient($c->get(PatientRepositoryInterface::class));
+    },
+
+
+
+
     AuthService::class => function (ContainerInterface $c) {
       return new AuthService($c->get(PDO::class));
     },
