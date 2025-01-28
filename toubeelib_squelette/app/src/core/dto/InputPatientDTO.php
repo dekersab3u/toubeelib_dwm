@@ -2,15 +2,20 @@
 
 namespace toubeelib\core\dto;
 
+use Cassandra\Timestamp;
+
 class InputPatientDTO extends DTO
 {
     protected string $nom;
     protected string $prenom;
     protected string $email;
-    protected \DateTimeImmutable $dateNaissance;
+    protected Timestamp $dateNaiss;
 
-    public function __construct(string $nom, string $prenom, string $adresse, string $tel, string $dateNaissance, string $sexe, string $profession, string $situationFamiliale, string $nbEnfants, string $antecedents, string $allergies, string $medicaments, string $dateCreation, string $dateModification) {
-
+    public function __construct(string $nom, string $prenom, string $email, Timestamp $dateNaiss) {
+        $this->nom = $nom;
+        $this->prenom = $prenom;
+        $this->email = $email;
+        $this->dateNaiss = $dateNaiss;
     }
 
 }
