@@ -20,7 +20,7 @@ class AccesRdvsByPraticienIdAction extends AbstractAction
     {
         try {
 
-            $idPraticien = $args['id_praticien'] ?? null;
+            $idPraticien = $args['ID-PRA'] ?? null;
             
             $rdvs = $this->rdvService->consulterRdvsPraticien($idPraticien);
 

@@ -10,20 +10,13 @@ return function( \Slim\App $app):\Slim\App {
     $app->post('/rdvs', \toubeelib\application\actions\PriseRdvAction::class);
     $app->get('/', \toubeelib\application\actions\HomeAction::class);
     $app->get('/praticiens', \toubeelib\application\actions\GetPraticiens::class);
-    $app->get('/praticien/{ID-PRA}', \toubeelib\application\actions\GetPraticienByID::class);
+    $app->get('/praticiens/{ID-PRA}', \toubeelib\application\actions\GetPraticienByID::class);
     $app->get('/rdvs/{ID-RDV}', \toubeelib\application\actions\AccesRdvByIdAction::class);
     $app->patch('/rdvs/{ID-RDV}', \toubeelib\application\actions\ModifRdvAction::class);
     $app->delete('/rdvs/{ID-RDV}', \toubeelib\application\actions\AnnulerRdvAction::class);
     $app->patch('/praticiens/{ID-PRA}', \toubeelib\application\actions\PracticienDisponibiliteAction::class);
     $app->get('/praticiens/{ID-PRA}/rdvs', \toubeelib\application\actions\AccesRdvsByPraticienIdAction::class);
     $app->post('/signin', \toubeelib\application\actions\SignInAction::class);
-
-
-    $app->options('/{routes:.+}',
-        function( Request $rq,
-                  Response $rs, array $args) : Response {
-            return $rs;
-        })->add(new \toubeelib\application\middlewares\CorsMiddleware());
 
     return $app;
 };
