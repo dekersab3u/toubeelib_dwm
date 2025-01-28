@@ -34,7 +34,7 @@ class ArrayPatientRepository implements PatientRepositoryInterface {
             $row['role'],
             $row['nom'],
             $row['prenom'],
-            $row['dateNaiss'],
+            $row['dateNais'],
         );
 
         return $patient;
@@ -49,12 +49,14 @@ class ArrayPatientRepository implements PatientRepositoryInterface {
 
         $patients = [];
         foreach ($rows as $row) {
-            $patients[] = new Patient(
+            $patient = new Patient(
                 $row['email'],
                 $row['role'],
                 $row['nom'],
                 $row['prenom'],
             );
+            $patient->setID($row['id']);
+            $patients[] = $patient;
         }
 
         return $patients;

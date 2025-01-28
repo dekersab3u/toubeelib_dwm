@@ -31,5 +31,10 @@ class Patient extends Entity {
         return $this->ID;
     }
 
+    public function setID(string $ID): void
+    {
+        $this->ID = $ID;
+    }
+
 
 }

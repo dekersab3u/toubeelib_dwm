@@ -24,13 +24,12 @@ class GetPatientsAction extends AbstractAction
 
             foreach ($patientsDTO as $p) {
                 $resultat["Patient"][] = [
-                    "id" => $p->id,
+                    "id" => $p->ID,
                     "nom" => $p->nom,
                     "prenom" => $p->prenom,
-                    "email" => $p->adresse,
-                    "tel" => $p->tel,
-                    "role" => $p->role,
-                    "dateNais" => $p->dateNais
+                    "email" => $p->email
+                    //"role" => $p->role,
+                    //"dateNais" => $p->dateNais
                 ];
             }
 
