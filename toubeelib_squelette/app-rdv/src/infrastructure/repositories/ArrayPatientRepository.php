@@ -39,6 +39,27 @@ class ArrayPatientRepository implements PatientRepositoryInterface {
 
         return $patient;
     }
+
+    public function getPatients(): array
+    {
+        $query = "SELECT id,email, role, nom, prenom, dateNais FROM patient";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $patients = [];
+        foreach ($rows as $row) {
+            $patients[] = new Patient(
+                $row['email'],
+                $row['role'],
+                $row['nom'],
+                $row['prenom'],
+                $row['dateNais'],
+            );
+        }
+
+        return $patients;
+    }
 }
 
 
