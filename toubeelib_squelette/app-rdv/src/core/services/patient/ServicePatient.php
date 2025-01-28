@@ -4,18 +4,37 @@ namespace rdv\core\services\patient;
 
 use rdv\core\dto\InputPatientDTO;
 use rdv\core\dto\PatientDTO;
+use rdv\core\repositoryInterfaces\PatientRepositoryInterface;
+use rdv\core\repositoryInterfaces\RepositoryEntityNotFoundException;
+use toubeelib\core\domain\entities\Patient\Patient;
+use toubeelib\core\services\patient\ServicePatientInvalidDataException;
 
 class ServicePatient implements ServicePatientInterface
 {
+    private PatientRepositoryInterface $patientRepository;
+
+    public function __construct(PatientRepositoryInterface $patientRepository)
+    {
+        $this->patientRepository = $patientRepository;
+    }
 
     public function getPatients(): array
     {
-        // TODO: Implement getPatients() method.
+        $patientsDTO = $this->patientRepository->getPatients();
+        foreach ($patientsDTO as $p){
+            $patientsDTO[] = new PatientDTO($p);
+        }
+        return $patientsDTO;
     }
 
     public function getPatientById(string $id): PatientDTO
     {
-        // TODO: Implement getPatientById() method.
+        try {
+            $patient = $this->patientRepository->getPatientById($id);
+            return new PatientDTO($patient);
+        } catch (RepositoryEntityNotFoundException $e) {
+            throw new ServicePatientInvalidDataException('invalid Patient ID');
+        }
     }
 
     public function createPatient(InputPatientDTO $p): PatientDTO
@@ -23,8 +42,13 @@ class ServicePatient implements ServicePatientInterface
         return new PatientDTO($p);
     }
 
-    public function getPatientByNom(string $nom): array
+    /*public function getPatientByNom(string $nom): array
     {
-        // TODO: Implement getPatientByNom() method.
-    }
+        $patientsDTO = [];
+        $patients = $this->patientRepository->getPatientByNom($nom);
+        foreach ($patients as $p){
+            $patientsDTO[] = new PatientDTO($p);
+        }
+        return $patientsDTO;
+    }*/
 }
