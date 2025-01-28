@@ -21,6 +21,13 @@ return[
         ]);
     },
 
+    'toubeelib.rdv' => function (ContainerInterface $c){
+        return new Client([
+            'base_uri' => $c->get('api.rdv'),
+            'timeout => 10.0,'
+        ]);
+    },
+
     CorsMiddleware::class => function (){
         return new CorsMiddleware();
     },

@@ -6,8 +6,8 @@ use rdv\core\dto\InputPatientDTO;
 use rdv\core\dto\PatientDTO;
 use rdv\core\repositoryInterfaces\PatientRepositoryInterface;
 use rdv\core\repositoryInterfaces\RepositoryEntityNotFoundException;
-use toubeelib\core\domain\entities\Patient\Patient;
-use toubeelib\core\services\patient\ServicePatientInvalidDataException;
+use rdv\core\domain\entities\Patient\Patient;
+use rdv\core\services\patient\ServicePatientInvalidDataException;
 
 class ServicePatient implements ServicePatientInterface
 {
