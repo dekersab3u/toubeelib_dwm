@@ -1,6 +1,6 @@
 <?php
 
-namespace toubeelib\core\services\patient;
+namespace rdv\core\services\patient;
 
 class ServicePatientInvalidDataException extends \Exception
 {
