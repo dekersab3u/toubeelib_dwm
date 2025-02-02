@@ -1,9 +1,11 @@
 <?php
 
 use gateway\application\actions\GatewayGetRdvByPraticienIdAction;
-use gateway\middleware\CorsMiddleware;
+use gateway\application\middleware\CorsMiddleware;
 use GuzzleHttp\Client;
 use Psr\Container\ContainerInterface;
+use gateway\application\actions\GatewayRegisterAction;
+use gateway\application\actions\GatewaySignInAction;
 
 
 return[
@@ -17,7 +19,14 @@ return[
     'toubeelib.praticien' => function (ContainerInterface $c){
         return new Client([
             'base_uri' => $c->get('api.praticien'),
-            'timeout => 10.0,'
+            'timeout' => 10.0,
+        ]);
+    },
+
+    'toubeelib.auth' => function(ContainerInterface $c){
+        return new Client([
+            'base_uri' => $c->get('api.auth'),
+            'timeout' => 10.0,
         ]);
     },
 
@@ -34,5 +43,13 @@ return[
     },
     GatewayGetRdvByPraticienIdAction::class => function(ContainerInterface $c){
         return new GatewayGetRdvByPraticienIdAction($c->get('toubeelib.client'));
+    },
+
+    GatewaySignInAction::class => function(ContainerInterface $c){
+        return new GatewaySignInAction($c->get('toubeelib.auth'));
+    },
+
+    GatewayRegisterAction::class => function(ContainerInterface $c){
+        return new GatewayRegisterAction($c->get('toubeelib.auth'));
     }
 ];

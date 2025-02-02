@@ -17,6 +17,7 @@ return function( \Slim\App $app):\Slim\App {
     $app->patch('/praticiens/{ID-PRA}', \toubeelib\application\actions\PracticienDisponibiliteAction::class);
     $app->get('/praticiens/{ID-PRA}/rdvs', \toubeelib\application\actions\AccesRdvsByPraticienIdAction::class);
     $app->post('/signin', \toubeelib\application\actions\SignInAction::class);
+    $app->post('/register', \toubeelib\application\actions\RegisterAction::class);
 
     return $app;
 };

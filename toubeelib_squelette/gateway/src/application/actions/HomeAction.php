@@ -2,11 +2,9 @@
 
 namespace gateway\application\actions;
 
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\HttpBadRequestException;
 
 class HomeAction
 {

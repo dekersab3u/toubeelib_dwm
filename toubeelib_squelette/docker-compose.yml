@@ -34,6 +34,19 @@ services:
       - toubeelib.db
     command: php -S 0.0.0.0:80 -t /var/php/public
 
+  api.auth:
+    build:
+      context: build
+      dockerfile: 8.3-cli.Dockerfile
+    ports:
+      - '55328:80'
+    volumes:
+      - ./app-auth:/var/php
+    networks:
+      - toubeelib.net
+    depends_on:
+      - toubeelib.db
+    command: php -S 0.0.0.0:80 -t /var/php/public
   # Service toubeelib.db : Base de données PostgreSQL
   toubeelib.db:
     image: 'postgres:latest'

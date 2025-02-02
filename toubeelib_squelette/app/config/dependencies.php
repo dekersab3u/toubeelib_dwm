@@ -4,9 +4,19 @@ use Psr\Container\ContainerInterface;
 use toubeelib\application\actions\AccesRdvsAction;
 use toubeelib\application\actions\AccesRdvsByPraticienIdAction;
 use toubeelib\application\actions\PriseRdvAction;
+use toubeelib\application\actions\RegisterAction;
+use toubeelib\application\middlewares\AuthnMiddleware;
+use toubeelib\application\providers\AuthnProviderInterface;
+use toubeelib\application\providers\JWTAuthnProvider;
+use toubeelib\application\providers\JWTManager;
 use toubeelib\core\repositoryInterfaces\PatientRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\PraticienRepositoryInterface;
 use toubeelib\core\repositoryInterfaces\RdvRepositoryInterface;
+use toubeelib\core\repositoryInterfaces\UserRepositoryInterface;
+use toubeelib\core\services\auth\AuthnService;
+use toubeelib\core\services\auth\AuthnServiceInterface;
+use toubeelib\core\services\auth\AuthzService;
+use toubeelib\core\services\auth\AuthzServiceInterface;
 use \toubeelib\core\services\rdv\RdvServiceInterface;
 use \toubeelib\application\actions\AccesRdvByIdAction;
 use toubeelib\infrastructure\repositories\ArrayPatientRepository;
@@ -21,6 +31,7 @@ use toubeelib\core\services\auth\AuthProvider;
 use toubeelib\core\services\auth\AuthService;
 use toubeelib\application\actions\GetPraticienByID;
 use toubeelib\application\actions\GetPraticiens;
+use toubeelib\infrastructure\repositories\UserRepository;
 
 return [
 
@@ -30,6 +41,14 @@ return [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
         ]);
+    },
+
+    JWTManager::class => function () {
+        return new JWTManager();
+    },
+
+    AuthnMiddleware::class =>function (ContainerInterface $c){
+        return new AuthnMiddleware($c->get(AuthnProviderInterface::class));
     },
 
     PraticienRepositoryInterface::class => function (ContainerInterface $c) {
@@ -45,6 +64,22 @@ return [
         return new ArrayRdvRepository($c->get(PDO::class));
     },
 
+    UserRepositoryInterface::class => function(ContainerInterface $c){
+        return new UserRepository($c->get(PDO::class));
+    },
+
+
+    AuthnServiceInterface::class => function (ContainerInterface $c){
+        return new AuthnService($c->get(UserRepositoryInterface::class));
+    },
+
+    AuthnProviderInterface::class =>function (ContainerInterface $c){
+        return new JWTAuthnProvider($c->get(JWTManager::class), $c->get(AuthnServiceInterface::class));
+    },
+
+    AuthzServiceInterface::class => function (ContainerInterface $c) {
+        return new AuthzService($c->get(UserRepositoryInterface::class));
+    },
 
     RdvServiceInterface::class => function (ContainerInterface $c) {
         return new \toubeelib\core\services\rdv\ServiceRDV($c->get(RdvRepositoryInterface::class), $c->get(PraticienRepositoryInterface::class), $c->get(PatientRepositoryInterface::class));
@@ -54,12 +89,12 @@ return [
         return new \toubeelib\core\services\praticien\ServicePraticien($c->get(PraticienRepositoryInterface::class));
     },
 
-    AuthService::class => function (ContainerInterface $c) {
-      return new AuthService($c->get(PDO::class));
+    SignInAction::class => function (ContainerInterface $c){
+        return new SignInAction($c->get(AuthnProviderInterface::class));
     },
 
-    AuthProvider::class => function (ContainerInterface $c){
-        return new AuthProvider($c->get(AuthService::class));
+    RegisterAction::class => function (ContainerInterface $c){
+        return new RegisterAction($c->get(AuthnProviderInterface::class));
     },
 
     AccesRdvByIdAction::class => function(ContainerInterface $c){
@@ -75,10 +110,6 @@ return [
 
     PracticienDisponibiliteAction::class => function (ContainerInterface $c){
         return new PracticienDisponibiliteAction($c->get(RdvServiceInterface::class), $c->get(ServicePraticienInterface::class));
-    },
-
-    SignInAction::class => function (ContainerInterface $c){
-        return new SignInAction($c->get(AuthProvider::class));
     },
 
     PriseRdvAction::class => function (ContainerInterface $c){
