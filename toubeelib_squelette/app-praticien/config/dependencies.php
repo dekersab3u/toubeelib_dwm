@@ -3,7 +3,7 @@
 use Psr\Container\ContainerInterface;
 use praticien\core\repositoryInterfaces\PraticienRepositoryInterface;
 use praticien\infrastructure\repositories\ArrayPraticienRepository;
-use \praticien\core\services\praticien\ServicePraticienInterface;
+use praticien\core\services\praticien\ServicePraticienInterface;
 use praticien\application\actions\GetPraticienByID;
 use praticien\application\actions\GetPraticiens;
 
