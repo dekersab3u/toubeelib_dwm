@@ -1,0 +1,43 @@
+version: '3.9'
+
+networks:
+  td2.net:
+    driver: bridge
+
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+        POSTGRES_USER: rgc
+        POSTGRES_PASSWORD: rgc
+        POSTGRES_DB: td1
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - td2.net
+
+  adminer:
+    image: adminer
+    ports:
+      - '8080:8080'
+    networks:
+      - td2.net
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../src:/var/www/html
+    ports:
+      - "8000:80"
+    depends_on:
+      - postgres
+
+
+
+volumes:
+  postgres_data:

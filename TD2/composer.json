@@ -1,0 +1,12 @@
+{
+  "require": {
+    "php": ">=8.2",
+    "doctrine/orm": "*",
+    "symfony/cache": "^6.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "iutnc\\doctrine\\": "./"
+    }
+  }
+}

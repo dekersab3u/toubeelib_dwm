@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3eb3674c-6fdf-4727-87a8-712e8da61547" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app-rdv/config/routes.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app-rdv/config/routes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app-rdv/src/application/actions/GetPatientsAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app-rdv/src/application/actions/GetPatientsAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/GetPatients.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/application/actions/GetPatients.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/dto/InputPatientDTO.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/dto/InputPatientDTO.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/patient/ServicePatientInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/patient/ServicePatientInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticien.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticien.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticienInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app/src/core/services/praticien/ServicePraticienInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toubeelib_squelette/app-rdv/src/infrastructure/adapter/PraticienClientAdapter.php" beforeDir="false" afterPath="$PROJECT_DIR$/toubeelib_squelette/app-rdv/src/infrastructure/adapter/PraticienClientAdapter.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
